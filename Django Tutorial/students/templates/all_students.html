@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        h1 {
+            color: #0056b3;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            padding: 10px;
+            margin-bottom: 5px;
+            background-color: #0056b3;
+            color: #fff;
+            border-radius: 5px;
+        }
+        li:nth-child(even) {
+            background-color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <h1>Student List</h1>
+
+    <ul>
+        {% for student in students %}
+            <li>{{ student.first_name }} {{ student.last_name }}</li>
+        {% empty %}
+            <li>No students available.</li>
+        {% endfor %}
+    </ul>
+
+</body>
+</html>
