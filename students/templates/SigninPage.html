@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sign In Form</title>
+</head>
+<body>
+    <h1>Sign In</h1>
+
+    <form method="post" action="">
+        {% csrf_token %}
+
+        <div>
+            <label for="id_student">Student CWID:</label>
+            {{ form.CWID }}
+        </div>
+
+        
+
+        <div>
+            <label for="id_email">Email:</label>
+            {{ form.email }}
+        </div>
+
+        <button type="submit">Submit</button>
+    </form>
+
+</body>
+</html>

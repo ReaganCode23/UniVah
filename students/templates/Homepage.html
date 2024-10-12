@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Button Example</title>
+    <style>
+        /* Inline CSS to style the button */
+        .custom-button {
+            font-size: 20px;      /* Font size for text */
+            padding: 10px 20px;   /* Padding to increase button size */
+            background-color: #de1c1c; /* Button background color */
+            color: white;         /* Text color */
+            border: none;         /* Remove border */
+            border-radius: 5px;   /* Rounded corners */
+            cursor: pointer;      /* Pointer cursor on hover */
+        }
+        .custom-button:hover {
+            background-color: #003087; /* Darker green on hover */
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to UniVah</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <!-- Button with custom text and size using CSS class -->
+        <button type="submit" class="custom-button">Book a Ride</button>
+    </form>
+</body>
+</html>
