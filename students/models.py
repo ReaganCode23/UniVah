@@ -11,5 +11,5 @@ class Student(models.Model):
 class TechStudent(models.Model):
 
     first_name = models.CharField(max_length=255, null = True)
-    CWID = models.CharField(max_length=255, null = True)
+    CWID = models.CharField(max_length=9, null = True)
     email = models.EmailField(null=True)
