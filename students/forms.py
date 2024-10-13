@@ -10,4 +10,5 @@ class CreateStudentForm(forms.Form):
 
 
 class SigninForm(forms.Form):
-    CWID = forms.CharField(max_length=9, label="CWID")
+    CWID = forms.CharField(max_length=255, label="CWID")
+    email = forms.EmailField(label="Email")

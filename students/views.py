@@ -68,28 +68,30 @@ from django.shortcuts import render, redirect
 
 class Homepage(View):
     def get(self, request):
-        return render(request, 'home.html')  # Create a template called new_template.html
+        return render(request, 'Homepage.html')  # Create a template called new_template.html
     
     def post(self, request):
         if request.method == "POST":
         # Redirect to another URL
-            return redirect('login')  # Change '/new-url/' to your desired 
+            return redirect('SigninPage')  # Change '/new-url/' to your desired 
         
         
 class SigninPage(View):
     def get(self, request):
         form = forms.SigninForm()
-        return render(request, 'login.html', {'form': form})  # Create a template called new_template.html
+        return render(request, 'SigninPage.html', {'form': form})  # Create a template called new_template.html
     
     def post(self, request):
 
         form = forms.SigninForm(request.POST)
         if form.is_valid():
-            techstudent = models.TechStudent(
+            student = models.TechStudent(
                 CWID = form.cleaned_data["CWID"],
+                email = form.cleaned_data["email"]
+
             )
 
-            techstudent.save()
+            student.save()
             return render(request, "sucess.html")
         
         return render(request, "error.html")
