@@ -10,8 +10,15 @@
         {% csrf_token %}
 
         <div>
-            <label for="CWID">Student CWID:</label>
+            <label for="id_student">Student CWID:</label>
             {{ form.CWID }}
+        </div>
+
+        
+
+        <div>
+            <label for="id_email">Email:</label>
+            {{ form.email }}
         </div>
 
         <button type="submit">Submit</button>
