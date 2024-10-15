@@ -84,12 +84,11 @@ class SigninPage(View):
     def post(self, request):
 
         form = forms.SigninForm(request.POST)
-        if form.is_valid():
-            techstudent = models.TechStudent(
-                CWID = form.cleaned_data["CWID"],
-            )
 
-            techstudent.save()
-            return render(request, "sucess.html")
-        
-        return render(request, "error.html")
+        if form.is_valid():
+            cwid = form.cleaned_data['CWID']
+            try:
+                rider = models.Rider.objects.get(CWID = cwid)
+                return render(request, "sucess.html")
+            except models.Rider.DoesNotExist:
+                return render(request, "error.html")
