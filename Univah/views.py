@@ -92,3 +92,34 @@ class SigninPage(View):
                 return render(request, "sucess.html")
             except models.Rider.DoesNotExist:
                 return render(request, "error.html")
+            
+
+class BookaRide(View):
+    def get (self, request):
+        form = forms.BookaRideForm
+        return render(request, 'bookride.html', {'form':form})
+    
+    def post(self, request):
+        form = forms.BookaRideForm(request.POST)
+        if form.is_valid():
+            RideRequest = models.RideRequest(
+               dropoff_location = form.cleaned_data['Location']
+            )
+            try:
+                Drivername = form.cleaned_data['Driver']
+                Driver = models.Driver.objects.get(first_name=Drivername)
+                Driver.status = 'Unavailable'
+                Driver.save()
+                RideRequest.save()
+                return render(request, 'sucess.html')
+            except Driver.DoesNotExist:
+                return render(request, 'error.html')
+        
+    
+
+class GetAllDrivers(View):
+    def get(self, request):
+        drivers = models.Driver.objects.all()  # Fetch all drivers
+        return render(request, 'all_drivers.html', {"drivers": drivers})
+
+            

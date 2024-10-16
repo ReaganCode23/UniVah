@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Book A Ride</title>
+</head>
+<body>
+    <h1>Location</h1>
+
+    <form method="post" action="">
+        {% csrf_token %}
+
+        <div>
+            <label for="Location">Address</label>
+            {{ form.Location}}
+        </div>
+
+        <div>
+            <label for="Driver">Driver</label>
+            {{ form.Driver}}
+        </div>
+
+        <button type="submit">Submit</button>
+    </form>
+
+</body>
+</html>
