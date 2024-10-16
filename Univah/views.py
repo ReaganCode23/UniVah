@@ -89,7 +89,8 @@ class SigninPage(View):
             cwid = form.cleaned_data['CWID']
             try:
                 rider = models.Rider.objects.get(CWID = cwid)
-                return render(request, "sucess.html")
+                first_name = rider.first_name
+                return render(request, "sucess.html",{'firstname':first_name})
             except models.Rider.DoesNotExist:
                 return render(request, "error.html")
             
@@ -111,7 +112,7 @@ class BookaRide(View):
                 Driver.status = 'Unavailable'
                 Driver.save()
                 RideRequest.save()
-                return render(request, 'sucess.html')
+                return render(request, 'sucess2.html')
             except Driver.DoesNotExist:
                 return render(request, 'error.html')
         
@@ -122,4 +123,8 @@ class GetAllDrivers(View):
         drivers = models.Driver.objects.all()  # Fetch all drivers
         return render(request, 'all_drivers.html', {"drivers": drivers})
 
+
+class HomeTemplate(View):
+    def get(self, request):
+        return render(request, 'univah.html')
             

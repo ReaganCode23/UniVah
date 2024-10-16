@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+    <meta charset = "UTF-8>">
+    <meta name = "viewport" content = "width=device-width, initial-scale = 1.0">
+    <title>UniVah- Taking To Your Destination</title>
+    <link rel = "stylesheet" href = "univah.css">
+</head>
+
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <nav>
+            <h1>UniVah</h1>
+            <ul>
+                <li><a href = "#book-ride">Book a Ride</a></li>
+                <li><a href = "#features">Features</a></li>
+                <li><a href = "#reviews">Reviews</a></li>
+                <li><a href = "contact">Contact Us</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <!--Hero Section -->
+    <section class = "hero">
+        <div class = "hero-text">
+            <h2>Fast, Reliable, Affordable</h2>
+            <p>Book a ride anytime, anywhere.</p>
+            <a href = "#book-ride" class = "hero-btn">Book Now</a>
+        </div>
+        <img src = "Pictures/Car ride.jpg".alt = "Car ride image" class = "hero-image">
+    </section>
+    
+    <!--Book a Ride Section -->
+    <section id = "book-ride">
+        <h2> Book Your Ride</h2>
+        <form id = "ride form" onsubmit = "confirmRide(event)">
+            <label for = "pickup">Pickup Location:</label>
+            <input type = "text" id = "pickup" name = "pickup" placeholder = "Enter your pickup location" required>
+
+            <label for = "dropoff">Drop-off Location</label>
+            <input type = "text" id = "dropoff" name = "dropoff" placeholder = "Enter your drop-off location" required>
+
+            <label for = "schedule">Schedule:</label>
+            <select id = "schedule" name = "schedule">
+                <option value = "instant"> Instant Booking</option>
+                <option value = "schedule">Schedule Ride</option>
+            </select>
+
+            <label for = "payment">Payment Method:</label>
+            <select id = "payment" name = "payment">
+                <option value = "online">Online Transaction</option>
+                <option value = "cash">Cash</option>
+            </select>
+
+            <button type = "submit">Confirm Ride</button>
+        </form>
+        
+        <!-- Ride Details Output-->
+        <div id = "ride-details" class = "hidden">
+            <h3>Ride Details</h3>
+            <p id = "ride-summary"></p>
+            <p><strong>Estimated Fare:</strong> $<span id = "fare"></span></p>
+            <button onclick = "startTracking()">Track Ride</button>
+        </div>
+
+        <!--Ride Tracking Map (Simualted)-->
+        <div id = "ride-map" class = "hidden">
+            <h3>Live Ride Tracking</h3>
+            <img src = "Pictures/GPS tracking.jpg" alt = "GPS Map Simulation" id = "map-image">
+            <p id = "driver-location">Driver is on the way.</p>
+        </div>
+
+    </section>
+
+    <!-- Features Section-->
+    <section id = "features">
+        <h2>Why UniVah</h2>
+        <div class = "feature-grid">
+            <div class = "feature-item">
+                <img src = "Pictures/GPS tracking.jpg" alt = "GPS Tracking">
+                <h3>Real-Time Tracking</h3>
+                <p>Track your ride with GPS for accurate updates on your driver's location.</p>
+            </div>
+            <div class = "feature-item">
+                <img src = "Pictures/Payment.jpg" alt = "Payment Options">
+                <h3>Secure Payment Options</h3>
+                <p>Pay online or with cash-whichever you prefer, safely and securely.</p>
+            </div>
+            <div class = "feature-item">
+                <img src = "Pictures/Driver secure.jpg" alt = "verified Drivers">
+                <h3>Verified Drivers</h3>
+                <p>Our drivers are verified to ensure safety and trust.</p>
+            </div>
+        </div>
+    </section>
+
+      <!-- Review Section -->
+    <section id = "reviews">
+        <h2>Customer Reviews</h2>
+        <div class = "reviews-grid">
+            <div clas = "review">
+                <p>"Amazing service! The ride was smooth, and the driver was punctual.</p>
+                <span>- Sarah</span>
+            </div>
+            <div class = "review">
+                <p>"I love the real-time tracking feature. It makes everything so convenient.</p>
+                <span> Nishant</span>
+            </div>
+            <div class = "review">
+                <p>"The option to schedule rides in advance is a life-saver."</p>
+                <span> Jay</span>
+            </div>
+        </div>
+    </section>
+
+    <!--Contact Section-->
+    <section id = "contact">
+        <h2>Contact Us</h2>
+        <p>Have queries? We are here to help!</p>
+        <a href = "mailto: univahsupport@latech.edu" class = "contact-btn">Email Us</a>
+    </section>
+
+    <!--Footer Section-->
+    <footer>
+        <p>&copy; 2024 UniVah. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
+        
+
+
+
+
+
