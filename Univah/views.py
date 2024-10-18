@@ -1,53 +1,22 @@
-from django.shortcuts import render
-from django.views import View
-from . import models
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from. import forms
-
-# Create your views here.
-
 from django.shortcuts import render, redirect
+from django.views import View
+from . import models, forms
 
 class Homepage(View):
     def get(self, request):
-        return render(request, 'home.html')  # Create a template called new_template.html
-    
-    def post(self, request):
-        if request.method == "POST":
-        # Redirect to another URL
-            return redirect('login')  # Change '/new-url/' to your desired 
-        
-        
-class SigninPage(View):
-    def get(self, request):
-        form = forms.SigninForm()
-        return render(request, 'login.html', {'form': form})  # Create a template called new_template.html
-    
-    def post(self, request):
+        form = forms.Pickup()
+        drivers = models.Driver.objects.all()
+        context = {
+            'form': form,
+            'drivers': drivers
+        }
+        return render(request, 'univah.html', context)
 
-        form = forms.SigninForm(request.POST)
-
-        if form.is_valid():
-            cwid = form.cleaned_data['CWID']
-            try:
-                rider = models.Rider.objects.get(CWID = cwid)
-                first_name = rider.first_name
-                return render(request, "sucess.html",{'firstname':first_name})
-            except models.Rider.DoesNotExist:
-                return render(request, "error.html")
-            
-
-class BookaRide(View):
-    def get (self, request):
-        form = forms.BookaRideForm
-        return render(request, 'bookride.html', {'form':form})
-    
     def post(self, request):
-        form = forms.BookaRideForm(request.POST)
+        form = forms.Pickup(request.POST)
         if form.is_valid():
             RideRequest = models.RideRequest(
-               dropoff_location = form.cleaned_data['Location']
+                dropoff_location=form.cleaned_data['Location']
             )
             try:
                 Drivername = form.cleaned_data['Driver']
@@ -55,19 +24,41 @@ class BookaRide(View):
                 Driver.status = 'Unavailable'
                 Driver.save()
                 RideRequest.save()
-                return render(request, 'sucess2.html')
-            except Driver.DoesNotExist:
-                return render(request, 'error.html')
-        
-    
+                success_message = "Ride request successfully created!"
+                context = {
+                    'form': forms.Pickup(),  # New empty form
+                    'drivers': models.Driver.objects.all(),
+                    'success_message': success_message
+                }
+                return render(request, 'univah.html', context)
+            except models.Driver.DoesNotExist:
+                error_message = "Driver not found."
+                context = {
+                    'form': form,
+                    'drivers': models.Driver.objects.all(),
+                    'error_message': error_message
+                }
+                return render(request, 'univah.html', context)
+        else:
+            drivers = models.Driver.objects.all()
+            context = {
+                'form': form,
+                'drivers': drivers
+            }
+            return render(request, 'univah.html', context)
 
-class GetAllDrivers(View):
+class SigninPage(View):
     def get(self, request):
-        drivers = models.Driver.objects.all()  # Fetch all drivers
-        return render(request, 'all_drivers.html', {"drivers": drivers})
+        form = forms.SigninForm()
+        return render(request, 'login.html', {'form': form})
 
-
-class HomeTemplate(View):
-    def get(self, request):
-        return render(request, 'univah.html')
-            
+    def post(self, request):
+        form = forms.SigninForm(request.POST)
+        if form.is_valid():
+            cwid = form.cleaned_data['CWID']
+            try:
+                rider = models.Rider.objects.get(CWID=cwid)
+                first_name = rider.first_name
+                return render(request, "success.html", {'firstname': first_name})
+            except models.Rider.DoesNotExist:
+                return render(request, "error.html")
