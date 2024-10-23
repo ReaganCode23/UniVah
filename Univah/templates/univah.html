@@ -51,12 +51,10 @@
     <!--Book a Ride Section -->
     <section id = "book-ride">
         <h2> Book Your Ride</h2>
-        <form method="post" action="">
+            <form method="post" action=""> 
             {% csrf_token %}
     
             <div>
-                <label for="Location">Drop-Off Location</label>
-                {{ form.Location}}
                 <label for="Driver">Driver</label>
                 {{ form.Driver}}
             <button type="submit">Submit</button>

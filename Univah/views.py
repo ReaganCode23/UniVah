@@ -4,53 +4,29 @@ from . import models, forms
 
 class Homepage(View):
     def get(self, request):
-        form = forms.Pickup()
+        form = forms.Bookride()
         drivers = models.Driver.objects.all()
-        context = {
-            'form': form,
-            'drivers': drivers
-        }
-        return render(request, 'univah.html', context)
-
+        return render(request, 'univah.html', {'form': form, 'drivers': drivers})
+    
     def post(self, request):
-        form = forms.Pickup(request.POST)
+        form = forms.Bookride(request.POST)
+        drivers = models.Driver.objects.all()
         if form.is_valid():
-            RideRequest = models.RideRequest(
-                dropoff_location=form.cleaned_data['Location']
-            )
+            first_name = form.cleaned_data['Driver']
             try:
-                Drivername = form.cleaned_data['Driver']
-                Driver = models.Driver.objects.get(first_name=Drivername)
-                Driver.status = 'Unavailable'
+                Driver = models.Driver.objects.get(first_name=first_name)
+                Driver.status = "Unavailable"
                 Driver.save()
-                RideRequest.save()
-                success_message = "Ride request successfully created!"
-                context = {
-                    'form': forms.Pickup(),  # New empty form
-                    'drivers': models.Driver.objects.all(),
-                    'success_message': success_message
-                }
-                return render(request, 'univah.html', context)
-            except models.Driver.DoesNotExist:
-                error_message = "Driver not found."
-                context = {
-                    'form': form,
-                    'drivers': models.Driver.objects.all(),
-                    'error_message': error_message
-                }
-                return render(request, 'univah.html', context)
-        else:
-            drivers = models.Driver.objects.all()
-            context = {
-                'form': form,
-                'drivers': drivers
-            }
-            return render(request, 'univah.html', context)
+                return render(request, 'ridestatus.html')
 
+            except models.Driver.DoesNotExist:
+                return render(request, 'error.html')
+        return render(request, 'univah.html', {'form': form, 'drivers': drivers})
+            
 class SigninPage(View):
     def get(self, request):
         form = forms.SigninForm()
-        return render(request, 'login.html', {'form': form})
+        return render(request, 'login.html')
 
     def post(self, request):
         form = forms.SigninForm(request.POST)
@@ -62,3 +38,7 @@ class SigninPage(View):
                 return render(request, "success.html", {'firstname': first_name})
             except models.Rider.DoesNotExist:
                 return render(request, "error.html")
+
+class RideStatus(View):
+    def get(self, request):
+        return render(request, 'ridestatus.html')
