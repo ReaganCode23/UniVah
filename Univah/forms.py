@@ -11,3 +11,7 @@ class Bookride(forms.Form):
         label='Driver',
         empty_label='Select a driver'
     )
+
+    pickup_address = forms.CharField(max_length=9, label="CWID")
+    dropoff_address = forms.CharField(max_length=9, label="CWID")
+    

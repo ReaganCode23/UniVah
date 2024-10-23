@@ -16,7 +16,15 @@ class Homepage(View):
             driver = models.Driver.objects.get(id=submission.id)
             driver.status = "Unavaliable"
             driver.save()
-            return render(request, 'ridestatus.html')
+            pickup_address = form.cleaned_data['pickup_address']
+            dropoff_address = form.cleaned_data['dropoff_address']
+            ride_request = models.RideRequest.objects.create(
+                driver = driver,
+                pickup_address = pickup_address,
+                dropoff_address = dropoff_address,
+                status='Pending'
+            )
+            return render(request, 'ridestatus.html', {'ride_request': ride_request})
         return render(request, 'univah.html', {'form': form, 'drivers': drivers})
             
 class SigninPage(View):
