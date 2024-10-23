@@ -1,18 +1,17 @@
 from django import forms
-
-
-class CreateStudentForm(forms.Form):
-    first_name = forms.CharField(max_length=255, label="First Name")
-    last_name = forms.CharField(max_length=255, label="Last Name")
-    email = forms.EmailField(label="Email")
-
-
-
+from . import models
 
 class SigninForm(forms.Form):
     CWID = forms.CharField(max_length=9, label="CWID")
 
 
-class BookaRideForm(forms.Form):
-    Location = forms.CharField(max_length=255, label="Location")
-    Driver = forms.CharField(max_length=255, label = 'Driver')
+class Bookride(forms.Form):
+    driver = forms.ModelChoiceField(
+        queryset=models.Driver.objects.filter(status='Available'),
+        label='Driver',
+        empty_label='Select a driver'
+    )
+
+    pickup_address = forms.CharField(max_length=9, label="CWID")
+    dropoff_address = forms.CharField(max_length=9, label="CWID")
+    

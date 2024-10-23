@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang = "en">
 <head>
@@ -32,29 +33,39 @@
         <img src = "Pictures/Car ride.jpg".alt = "Car ride image" class = "hero-image">
     </section>
     
+    <!-- Driver List Section -->
+    <section id="driver-list">
+        <h2>Driver List</h2>
+        <ul>
+            {% for driver in drivers %}
+                <li class="driver-item">
+                    <span class="driver-name">{{ driver.first_name }} {{ driver.last_name }} </span>
+                    <span class="driver-status">Status: {{ driver.get_status_display }}</span>
+                </li>
+            {% empty %}
+                <li class="no-drivers">No Drivers available.</li>
+            {% endfor %}
+        </ul>
+
+    
     <!--Book a Ride Section -->
     <section id = "book-ride">
         <h2> Book Your Ride</h2>
-        <form id = "ride form" onsubmit = "confirmRide(event)">
-            <label for = "pickup">Pickup Location:</label>
-            <input type = "text" id = "pickup" name = "pickup" placeholder = "Enter your pickup location" required>
-
-            <label for = "dropoff">Drop-off Location</label>
-            <input type = "text" id = "dropoff" name = "dropoff" placeholder = "Enter your drop-off location" required>
-
-            <label for = "schedule">Schedule:</label>
-            <select id = "schedule" name = "schedule">
-                <option value = "instant"> Instant Booking</option>
-                <option value = "schedule">Schedule Ride</option>
-            </select>
-
-            <label for = "payment">Payment Method:</label>
-            <select id = "payment" name = "payment">
-                <option value = "online">Online Transaction</option>
-                <option value = "cash">Cash</option>
-            </select>
-
-            <button type = "submit">Confirm Ride</button>
+            <form method="post" action=""> 
+            {% csrf_token %}
+    
+            <div>
+                <label for="Driver">Driver</label>
+                {{ form.driver}}
+            <div>
+                <label for="Pickup_Address">Pickup_Address</label>
+                {{ form.pickup_address}}
+            </div>
+            <div>
+                <label for="Dropoff_Address">Dropoff_Address</label>
+                {{ form.dropoff_address}}
+            </div>
+            <button type="submit">Submit</button>
         </form>
         
         <!-- Ride Details Output-->
