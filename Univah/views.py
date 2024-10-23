@@ -12,15 +12,11 @@ class Homepage(View):
         form = forms.Bookride(request.POST)
         drivers = models.Driver.objects.all()
         if form.is_valid():
-            first_name = form.cleaned_data['Driver']
-            try:
-                Driver = models.Driver.objects.get(first_name=first_name)
-                Driver.status = "Unavailable"
-                Driver.save()
-                return render(request, 'ridestatus.html')
-
-            except models.Driver.DoesNotExist:
-                return render(request, 'error.html')
+            submission = form.cleaned_data['driver']
+            driver = models.Driver.objects.get(id=submission.id)
+            driver.status = "Unavaliable"
+            driver.save()
+            return render(request, 'ridestatus.html')
         return render(request, 'univah.html', {'form': form, 'drivers': drivers})
             
 class SigninPage(View):
