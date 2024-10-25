@@ -3,29 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Button Example</title>
+    <title>Home</title>
     <style>
-        /* Inline CSS to style the button */
-        .custom-button {
-            font-size: 20px;      /* Font size for text */
-            padding: 10px 20px;   /* Padding to increase button size */
-            background-color: #de1c1c; /* Button background color */
-            color: white;         /* Text color */
-            border: none;         /* Remove border */
-            border-radius: 5px;   /* Rounded corners */
-            cursor: pointer;      /* Pointer cursor on hover */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
         }
-        .custom-button:hover {
-            background-color: #003087; /* Darker green on hover */
+        header {
+            background-color: #003366;
+            color: #fff;
+            padding: 1em;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+        .signin {
+            font-size: 1em;
+        }
+        .content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: calc(100vh - 4em); /* Adjusts for header/footer height */
+            text-align: center;
+        }
+        .bookride-button {
+            background-color: #003366;
+            color: #fff;
+            padding: 1em 2em;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 1.5em;
+            margin: 20px 0;
+        }
+        .bookride-button:hover {
+            background-color: #cc0000;
+        }
+        footer {
+            background-color: #003366;
+            color: #fff;
+            text-align: center;
+            padding: 1em;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
         }
     </style>
 </head>
 <body>
-    <h1>Welcome to UniVah</h1>
-    <form method="POST">
-        {% csrf_token %}
-        <!-- Button with custom text and size using CSS class -->
-        <button type="submit" class="custom-button">Book a Ride</button>
-    </form>
+    <header>
+        <div class="logo">UniVah</div>
+        <div class="signin">
+            <form action="{% url 'login' %}" method="get">
+                <button type="submit">Login</button>
+            </form>
+        </div>
+    </header>
+    <div class="content">
+        <h1 style="color: #003366;">Welcome to Univah</h1>
+        <a href="{% url 'login' %}" class="bookride-button">Book Ride</a>
+    </div>
+    <footer>
+        <p>Contact us: Univah Team</p>
+    </footer>
 </body>
 </html>
+

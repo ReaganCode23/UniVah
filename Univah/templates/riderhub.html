@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudentRiderHub</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        header {
+            background-color: #003366;
+            color: #fff;
+            padding: 1em;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+        .title {
+            font-size: 2.5em;
+            text-align: center;
+        }
+        .signin {
+            font-size: 1em;
+        }
+        .content {
+            padding: 2em;
+        }
+        .section {
+            background-color: #fff;
+            padding: 1.5em;
+            margin-bottom: 1.5em;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .section h2 {
+            margin-top: 0;
+            color: #003366;
+        }
+        .form-group {
+            margin-bottom: 1em;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5em;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 0.5em;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .form-group textarea {
+            height: 100px;
+        }
+        .btn {
+            background-color: #003366;
+            color: #fff;
+            padding: 0.75em 1.5em;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #002244;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">UniVah</div>
+        <div class="signin">
+            <form action="{% url 'logout' %}" method="get">
+                <button type="submit">Logout</button>
+            </form>
+            <span>{{ user.username }}</span>
+        </div>
+    </header>
+    <div class="title">StudentRiderHub</div>
+    <div class="content">
+        <div class="section">
+            <h2>Available Drivers</h2>
+            <p>Number of drivers available: <span id="driver-count">{{ drivers.count }}</span></p>
+        </div>
+        <div class="section">
+            <h2>Book Ride</h2>
+            <form method="post" action="">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="pickup_address">Pickup Location:</label>
+                    {{ form.pickup_address }}
+                </div>
+                <div class="form-group">
+                    <label for="dropoff_address">Dropoff Location:</label>
+                    {{ form.dropoff_address }}
+                </div>
+                <div class="form-group">
+                    <label for="extra_notes">Extra Notes:</label>
+                    {{ form.extra_notes }}
+                </div>
+                <button type="submit" class="btn">Submit</button>
+            </form>
+        </div>
+        <div class="section">
+            <h2>Rider Status</h2>
+            <p>Status: <span id="rider-status">{{ride_request.status}}</span></p>
+        </div>
+        <div class="section">
+            <h2>Ride Details</h2>
+            <p>Driver's Name: <span id="driver-name">John Doe</span></p>
+            <p>Car Model and Color: <span id="car-model">Toyota Camry, Red</span></p>
+            <p>License Plate: <span id="license-plate">XYZ 1234</span></p>
+            <p>ETA: <span id="eta">10 minutes</span></p>
+        </div>
+    </div>
+</body>
+</html>

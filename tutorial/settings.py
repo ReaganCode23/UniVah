@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'Univah',
-    'rest_framework'
+    'members'
 ]
 
 MIDDLEWARE = [
