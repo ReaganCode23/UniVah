@@ -1,0 +1,25 @@
+<h1>Driver Hub</h1>
+
+{% for ride in pending_rides %}
+    <div>
+        <h2>Ride Request from {{ ride.rider.first_name }} {{ ride.rider.last_name }}</h2>
+        <p>Pickup: {{ ride.pickup_address }}</p>
+        <p>Dropoff: {{ ride.dropoff_address }}</p>
+
+        <form method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="ride_id" value="{{ ride.id }}">
+            <button type="submit" name="accept_ride">Accept</button>
+            <button type="submit" name="decline_ride">Decline</button>
+        </form>
+    </div>
+{% empty %}
+    <p>No new ride requests.</p>
+{% endfor %}
+
+<h2>Close Out Completed Ride</h2>
+<form method="POST">
+    {% csrf_token %}
+    <input type="hidden" name="ride_id" value="{{ ride.id }}">
+    <button type="submit" name="close_ride">Close Ride</button>
+</form>

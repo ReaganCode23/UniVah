@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sign In Form</title>
+</head>
+<body>
+    <h1>Sign In</h1>
+
+    <form method="post" action="">
+        {% csrf_token %}
+
+        <div>
+            <label for="CWID">Student CWID:</label>
+            {{ form.CWID }}
+        </div>
+
+        <label for="id_user_type">I am a:</label>
+    <select name="user_type" id="id_user_type">
+        <option value="rider">Rider</option>
+        <option value="driver">Driver</option>
+    </select><br>
+
+        <button type="submit">Submit</button>
+    </form>
+
+</body>
+</html>
