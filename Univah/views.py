@@ -28,3 +28,7 @@ class RiderHub(View):
             return render(request, 'riderhub.html', {'ride_request': ride_request, 'form': form, 'drivers': drivers })
 
         return render(request, 'riderhub.html', {'form': form, 'drivers': drivers})
+    
+class DriverHub(View):
+    def get(self, request):
+        return render(request, 'driverhub.html')

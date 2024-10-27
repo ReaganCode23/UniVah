@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driver Hub</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        header {
+            background-color: #990000;
+            color: #fff;
+            padding: 1em;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+        .signin {
+            font-size: 1em;
+        }
+        .content {
+            padding: 2em;
+        }
+        .section {
+            background-color: #fff;
+            padding: 1.5em;
+            margin-bottom: 1.5em;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .section h2 {
+            margin-top: 0;
+            color: #990000;
+        }
+        .form-group {
+            margin-bottom: 1em;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5em;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 0.5em;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .form-group textarea {
+            height: 100px;
+        }
+        .btn {
+            background-color: #990000;
+            color: #fff;
+            padding: 0.75em 1.5em;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #cc0000;
+        }
+        .requests {
+            list-style-type: none;
+            padding: 0;
+        }
+        .request {
+            background-color: #e3e3e3;
+            margin: 0.5em 0;
+            padding: 1em;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">UniVah</div>
+        <div class="signin">
+            <form action="{% url 'login' %}" method="get">
+                <button type="submit">Login</button>
+            </form>
+        </div>
+    </header>
+    <div class="content">
+        <h1 style="color: #990000;">Driver Hub</h1>
+        <div class="section">
+            <h2>Ride Requests</h2>
+            <ul class="requests">
+                <!-- Example request -->
+                <li class="request">
+                    <p><strong>Rider Name:</strong> John Doe</p>
+                    <p><strong>Pickup Location:</strong> 123 Main St</p>
+                    <p><strong>Dropoff Location:</strong> 456 Elm St</p>
+                    <p><strong>Notes:</strong> Please hurry!</p>
+                    <button class="btn">Accept</button>
+                    <button class="btn">Deny</button>
+                </li>
+                <!-- Add more requests here -->
+            </ul>
+        </div>
+        <div class="section">
+            <h2>Active Ride</h2>
+            <p><strong>Rider Name:</strong> John Doe</p>
+            <p><strong>Pickup Location:</strong> 123 Main St</p>
+            <p><strong>Dropoff Location:</strong> 456 Elm St</p>
+            <p><strong>Notes:</strong> Please hurry!</p>
+            <div class="form-group">
+                <label for="eta">ETA (minutes):</label>
+                <input type="number" id="eta" name="eta">
+            </div>
+            <button class="btn">Update ETA</button>
+        </div>
+    </div>
+    <footer>
+        <p>Contact us: Univah Team</p>
+    </
