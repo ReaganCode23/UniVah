@@ -15,7 +15,7 @@ def login_user(request):
             # Redirect to a success page.
                 
         else:
-            messages.success(request, ("There Was an Error Loggin In, Try Again..."))
+            messages.success(request, ("There Was an Error Logging In, Try Again..."))
             # Return an 'invalid login' error message.
             return redirect('login')
     return render(request, 'authenticate/login.html', {})
