@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StudentRiderHub</title>
+    <title>Driver Hub</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -12,7 +12,7 @@
             background-color: #f5f5f5;
         }
         header {
-            background-color: #003366;
+            background-color: #cc0000;
             color: #fff;
             padding: 1em;
             display: flex;
@@ -22,10 +22,6 @@
         .logo {
             font-size: 1.5em;
             font-weight: bold;
-        }
-        .title {
-            font-size: 2.5em;
-            text-align: center;
         }
         .signin {
             font-size: 1em;
@@ -42,7 +38,7 @@
         }
         .section h2 {
             margin-top: 0;
-            color: #003366;
+            color: #cc0000;
         }
         .form-group {
             margin-bottom: 1em;
@@ -61,7 +57,7 @@
             height: 100px;
         }
         .btn {
-            background-color: #003366;
+            background-color: #cc0000;
             color: #fff;
             padding: 0.75em 1.5em;
             border: none;
@@ -69,7 +65,17 @@
             cursor: pointer;
         }
         .btn:hover {
-            background-color: #002244;
+            background-color: #990000;
+        }
+        .requests {
+            list-style-type: none;
+            padding: 0;
+        }
+        .request {
+            background-color: #e3e3e3;
+            margin: 0.5em 0;
+            padding: 1em;
+            border-radius: 4px;
         }
     </style>
 </head>
@@ -80,41 +86,29 @@
             <form action="{% url 'logout' %}" method="get">
                 <button type="submit">Logout</button>
             </form>
-            <span>{{ user.username }}</span>
         </div>
     </header>
-    <div class="title">StudentRiderHub</div>
     <div class="content">
+        <h1 style="color: #cc0000;">Ride Requests</h1>
         <div class="section">
-            <h2>Available Drivers</h2>
-            <p>Number of drivers available: <span id="driver-count">{{ drivers.count }}</span></p>
-        </div>
-        <div class="section">
-            <h2>Book Ride</h2>
-            <form method="post" action="">
-                {% csrf_token %}
-                <div class="form-group">
-                    <label for="pickup_address">Pickup Location:</label>
-                    {{ form.pickup_address }}
-                </div>
-                <div class="form-group">
-                    <label for="dropoff_address">Dropoff Location:</label>
-                    {{ form.dropoff_address }}
-                </div>
-                <button type="submit" class="btn">Submit</button>
-            </form>
-        </div>
-        <div class="section">
-            <h2>Rider Status</h2>
-            <p>Status: <span id="rider-status">{{ride_request.status}}</span></p>
-        </div>
-        <div class="section">
-            <h2>Ride Details</h2>
-            <p>Driver's Name: <span id="driver-name">John Doe</span></p>
-            <p>Car Model and Color: <span id="car-model">Toyota Camry, Red</span></p>
-            <p>License Plate: <span id="license-plate">XYZ 1234</span></p>
-            <p>ETA: <span id="eta">10 minutes</span></p>
+            <h2>Ride Requests</h2>
+            <ul class="requests">
+                {% for request in ride_requests %}
+                <li class="request">
+                    <p><strong>Rider Name:</strong> {{ request.rider.user.username }}</p>
+                    <p><strong>Pickup Location:</strong> {{ request.pickup_address }}</p>
+                    <p><strong>Dropoff Location:</strong> {{ request.dropoff_address }}</p>
+                    <button class="btn">Accept</button>
+                    <button class="btn">Deny</button>
+                </li>
+                {% empty %}
+                <li class="request">No pending ride requests.</li>
+                {% endfor %}
+            </ul>
         </div>
     </div>
+    <footer>
+        <p>Contact us: Univah Team</p>
+    </footer>
 </body>
 </html>
