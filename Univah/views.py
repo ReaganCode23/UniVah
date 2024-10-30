@@ -31,11 +31,43 @@ class RiderHub(View):
             return render(request, 'riderhub.html', {'ride_request': ride_request, 'form': form, 'drivers': drivers, 'user': request.user})
         return render(request, 'riderhub.html', {'form': form, 'drivers': drivers})
 
+
 class DriverHub(View):
     def get(self, request):
-        ride_requests = models.RideRequest.objects.filter(driver=None, status='Pending')  # Only show pending requests
-        return render(request, 'driverhub.html', {'ride_requests': ride_requests})
+        driver = models.Driver.objects.get(user=request.user)
+        accepted_ride_requests = models.RideRequest.objects.filter(status='Accepted', driver=driver)
+        ride_requests = models.RideRequest.objects.filter(status='Pending')
+        return render(request, 'driverhub.html', {
+            'accepted_ride_requests': accepted_ride_requests,
+            'pending_ride_requests': ride_requests
+        })
+
+    def post(self, request):
+        request_id = request.POST.get('request_id')
+        action = request.POST.get('action')
+        driver = models.Driver.objects.get(user=request.user)
+
+        if not request_id:
+            return redirect('driverhub')  # Handle gracefully if request_id is missing
+
+        ride_request = get_object_or_404(models.RideRequest, id=request_id)
+
+        if action == 'Accept':
+            ride_request.status = 'Accepted'
+            ride_request.driver = driver
+            ride_request.save()
+
+
+        return redirect('driverhub')
     
+
+
+
+
+
+
+
+
 class Transpo(View):
     def get(self, request):
         return render(request, 'transpo-fix.html')

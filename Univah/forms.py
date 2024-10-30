@@ -8,4 +8,4 @@ class SigninForm(forms.Form):
 class Bookride(forms.Form):
     pickup_address = forms.CharField(max_length=9, label="pickup_address")
     dropoff_address = forms.CharField(max_length=9, label="dropoff_address")
-    
+
