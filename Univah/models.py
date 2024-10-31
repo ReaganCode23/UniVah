@@ -17,4 +17,5 @@ class RideRequest(models.Model):
     driver = models.ForeignKey(Driver, on_delete=models.CASCADE, null=True, related_name='driver_requests')
     pickup_address = models.CharField(max_length=255, null=True)
     dropoff_address = models.CharField(max_length=255, null=True)
+    booking_type = models.CharField(max_length=255, null=True)
     status = models.CharField(max_length=20, choices=[('Pending', 'Pending'), ('Accepted', 'Accepted'), ('Completed', 'Completed')], default='Pending')

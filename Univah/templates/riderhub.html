@@ -42,6 +42,13 @@
             width: 100%;
         }
 
+        .user-name {
+            color: #fff;
+            font-size: 18px;
+            margin-left: auto;
+            margin-right: 10px;
+        }
+
         header ul li {
             display: inline;
         }
@@ -52,83 +59,33 @@
             font-size: 18px;
         }
 
-        @media (max-width: 768px) {
-            header ul {
-                flex-wrap: wrap;
-                justify-content: center; /* Center items on small screens */
-            }
-            
-            header ul li a {
-                font-size: 16px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            header h1 {
-                font-size: 24px;
-            }
-
-            header ul li a {
-                font-size: 14px;
-            }
-        }
-
-        .hero {
+        .content {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            padding: 50px;
-            background-color: #e0f7fa;
+            padding: 20px;
+            max-width: 1200px;
+            margin: auto;
         }
 
-        .hero-text {
-            max-width: 50%;
-        }
-
-        .hero-text h2 {
-            font-size: 48px;
-            margin-bottom: 20px;
-        }
-
-        .hero-text p {
-            font-size: 20px;
-        }
-
-        .hero-btn {
-            background-color: #00796b;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            text-decoration: none; /* Make it a link */
-        }
-
-        .hero-image {
-            max-width: 45%;
-            height: auto;
-        }
-
-        #book-ride {
+        #book-ride,
+        #current-ride {
             background-color: white;
-            padding: 50px;
-            text-align: center;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 48%;
         }
 
-        #book-ride h2 {
-            margin-bottom: 30px; /* Add spacing below the heading */
-            color: #1e3a8a; /* Match the theme color */
+        #book-ride h2,
+        #current-ride h2 {
+            margin-bottom: 20px;
+            color: #1e3a8a;
         }
 
         #book-ride form {
             display: flex;
             flex-direction: column;
             gap: 15px;
-            max-width: 400px; /* Center the form */
-            margin: auto; /* Center horizontally */
-            padding: 20px; /* Add padding around the form */
-            border: 1px solid #ccc; /* Add border for emphasis */
-            border-radius: 10px; /* Round the corners */
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
-            background-color: #f9f9f9; /* Light background for the form */
         }
 
         #book-ride input,
@@ -136,8 +93,8 @@
         button {
             padding: 10px;
             font-size: 16px;
-            border-radius: 5px; /* Round the input edges */
-            border: 1px solid #ccc; /* Add a border */
+            border-radius: 5px;
+            border: 1px solid #ccc;
         }
 
         button {
@@ -145,74 +102,17 @@
             color: white;
             border: none;
             cursor: pointer;
-            font-size: 16px; /* Default button font size */
+            font-size: 16px;
         }
 
         button:hover {
-            background-color: #005f56; /* Darker shade on hover */
+            background-color: #005f56;
         }
 
-        #features {
-            background-color: #fff;
-            padding: 50px;
-            text-align: center;
-        }
-
-        .feature-grid {
+        #current-ride {
             display: flex;
-            justify-content: space-around;
-            gap: 20px;
-        }
-
-        .feature-item {
-            max-width: 300px;
-        }
-
-        .feature-item img {
-            width: 100%;
-            height: auto;
-            border-radius: 10px;
-        }
-
-        #reviews {
-            padding: 50px;
-            background-color: #e0f7fa;
-        }
-
-        .reviews-grid {
-            display: flex;
-            justify-content: space-around;
-            gap: 20px;
-        }
-
-        .review {
-            max-width: 300px;
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-        }
-
-        .review p {
-            font-style: italic;
-        }
-
-        .review span {
-            display: block;
-            margin-top: 10px;
-            font-weight: bold;
-        }
-
-        #contact {
-            padding: 50px;
-            text-align: center;
-        }
-
-        .contact-btn {
-            background-color: #00796b;
-            color: white;
-            padding: 10px 20px;
-            text-decoration: none;
-            border-radius: 5px;
+            flex-direction: column;
+            margin-top: 20px;
         }
 
         footer {
@@ -222,72 +122,14 @@
             color: #fff;
         }
 
-        .hidden {
-            display: none;
-        }
-
-        #ride-details,
-        #ride-map {
-            margin-top: 20px;
-        }
-
         @media (max-width: 768px) {
-            .hero {
-                flex-direction: column;
-                text-align: center;
+            .content {
+                flex-direction: column; /* Stack columns on small screens */
             }
 
-            .hero-text h2 {
-                font-size: 32px;
-            }
-
-            .hero-text p {
-                font-size: 18px;
-            }
-
-            .hero-image {
-                max-width: 100%;
-            }
-
-            .feature-grid,
-            .reviews-grid {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            #book-ride form {
-                max-width: 90%;
-            }
-
-            .hero-image {
-                margin-top: 25px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .hero-text h2 {
-                font-size: 20px;
-            }
-
-            .hero-text p {
-                font-size: 14px; /* Reduced font size for small devices */
-            }
-
-            header h1 {
-                font-size: 20px;
-            }
-
-            header ul li a {
-                font-size: 8px;
-            }
-
-            .hero-btn {
-                padding: 8px 8px; /* Adjusted padding for small devices */
-                font-size: 8px; /* Reduced font size for small devices */
-            }
-
-            .hero-image {
-                margin-top: 16px;
+            #book-ride, #current-ride {
+                width: 100%; /* Full width on smaller screens */
+                margin-bottom: 20px; /* Space between sections */
             }
         }
     </style>
@@ -298,59 +140,49 @@
             <h1>UniVah</h1>
             <ul>
                 <li><a href="#book-ride">Book a Ride</a></li>
+                <li><a href="{% url 'driverhub' %}">Rider</a></li>
                 <li><a href="#features">Features</a></li>
                 <li><a href="#reviews">Reviews</a></li>
                 <li><a href="#contact">Contact Us</a></li>
+                <span class="user-name">{{ user.first_name }}</span>
             </ul>
         </nav>
     </header>
 
-    <section class="hero">
-        <div class="hero-text">
-            <h2>Fast, Reliable, Affordable</h2>
-            <p>Book a ride anytime, anywhere.</p>
-            <a href="#book-ride" class="hero-btn">Book Now</a>
-        </div>
-        <img src="images/download.jpeg" alt="Car ride image" class="hero-image">
-    </section>
+    <div class="content">
+        <section id="current-ride">
+            {% if ride_request %}
+                <h2>Your Current Ride</h2>
+                <p><strong>Status:</strong> {{ ride_request.status }}</p>
+                <p><strong>Pickup Location:</strong> {{ ride_request.pickup_address }}</p>
+                <p><strong>Drop-off Location:</strong> {{ ride_request.dropoff_address }}</p>
+                <p><strong>Booking Type:</strong> {{ ride_request.booking_type }}</p>
+                <p><strong>Driver:</strong> {{ ride_request.driver.user.first_name }} {{ ride_request.driver.user.last_name }}</p>
+                <p><strong>Driver Contact:</strong> {{ ride_request.driver.phone_number }}</p>
+                <p><strong>Vehicle Model:</strong> {{ ride_request.driver.vehicle_type}}</p>
+                <p><strong>Vehicle Color:</strong> {{ ride_request.driver.vehicle_color}}</p>
+                <p><strong>License Plate:</strong> {{ ride_request.driver.license_number}}</p>
+                <p>Once the ride is completed, you can book another ride.</p>
+            {% else %}
+                <h2>No Current Ride</h2>
+                <p>You can book a ride using the form on the right.</p>
+            {% endif %}
+        </section>
 
-    <section id="book-ride">
-        <h2>Book Your Ride</h2>
-        <form id="ride-form" onsubmit="confirmRide(event)">
-            <label for="pickup">Pickup Location:</label>
-            <input type="text" id="pickup" name="pickup" placeholder="Enter your pickup location" required>
-            
-            <label for="dropoff">Drop-off Location:</label>
-            <input type="text" id="dropoff" name="dropoff" placeholder="Enter your drop-off location" required>
-
-            <label for="schedule">Schedule:</label>
-            <select id="schedule" name="schedule">
-                <option value="instant">Instant Booking</option>
-                <option value="schedule">Schedule Ride</option>
-            </select>
-
-            <label for="payment">Payment Method:</label>
-            <select id="payment" name="payment">
-                <option value="online">Online Transaction</option>
-                <option value="cash">Cash</option>
-            </select>
-
-            <button type="submit">Confirm Ride</button>
-        </form>
-
-        <div id="ride-details" class="hidden">
-            <h3>Ride Details</h3>
-            <p id="ride-summary"></p>
-            <p><strong>Estimated Fare:</strong> $<span id="fare"></span></p>
-            <button onclick="startTracking()">Track Ride</button>
-        </div>
-
-        <div id="ride-map" class="hidden">
-            <h3>Live Ride Tracking</h3>
-            <img src="Pictures/GPS tracking.jpeg" alt="GPS Map Simulation" id="map-image">
-            <p id="driver-location">Driver is 5 minutes away.</p>
-        </div>
-    </section>
+        <section id="book-ride">
+            <h2>Book Your Ride</h2>
+            <form id="ride-form" method="post" onsubmit="confirmRide(event)">
+                {% csrf_token %}
+                <label for="pickup">Pickup Location:</label>
+                {{ form.pickup_address }}
+                <label for="dropoff">Drop-off Location:</label>
+                {{ form.dropoff_address }}
+                <label for="schedule">Schedule:</label>
+                {{ form.booking_type }}
+                <button type="submit">Confirm Ride</button>
+            </form>
+        </section>
+    </div>
 
     <section id="features">
         <h2>Why RideWithEase?</h2>

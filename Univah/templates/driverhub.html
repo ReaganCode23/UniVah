@@ -37,6 +37,12 @@
             justify-content: flex-start;
             width: 100%;
         }
+        .user-name {
+            color: #fff;
+            font-size: 18px;
+            margin-left: auto;
+            margin-right: 10px;
+        }
         header ul li a {
             color: #fff;
             text-decoration: none;
@@ -63,13 +69,6 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             margin-bottom: 1.5em;
         }
-        .profile {
-            background-color: #e0f7fa;
-            padding: 1.5em;
-            text-align: center;
-            border-radius: 8px;
-            margin-bottom: 1em;
-        }
         .requests {
             list-style-type: none;
             padding: 0;
@@ -93,6 +92,20 @@
         .btn:hover {
             background-color: #164282;
         }
+        .messages {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 1em 0;
+        }
+        .message {
+            background-color: #ffdddd; /* Light red background */
+            color: #d8000c; /* Dark red text */
+            padding: 5px; /* Smaller padding */
+            font-size: 14px; /* Smaller font size */
+            margin-bottom: 1em;
+            border: 1px solid #d8000c; /* Dark red border */
+            border-radius: 4px;
+        }
         footer {
             background-color: #1e3a8a;
             color: #fff;
@@ -113,30 +126,31 @@
             <h1>UniVah</h1>
             <ul>
                 <li><a href="#book-ride">Book a Ride</a></li>
+                <li><a href="{% url 'riderhub' %}">Rider</a></li>
                 <li><a href="#features">Features</a></li>
                 <li><a href="#reviews">Reviews</a></li>
                 <li><a href="#contact">Contact Us</a></li>
+                <span class="user-name">{{ user.first_name }}</span>
             </ul>
+
         </nav>
     </header>
 
     <div class="content">
         <div class="left-column">
-            <div class="section profile">
-                <h2>Driver Profile</h2>
-                <p><strong>Name:</strong> {{ user.name }}</p>
-                <p><strong>Major:</strong> {{ user.major }}</p>
-            </div>
-
             <div class="section">
                 <h2>Accepted Rides</h2>
                 <ul class="requests">
                     {% for request in accepted_ride_requests %}
                     <li class="request">
-                        <p><strong>Rider Name:</strong> {{ request.rider.user.username }}</p>
+                        <p><strong>Rider Name:</strong> {{ request.rider.user.first_name }} {{ request.rider.user.last_name }}</p>
                         <p><strong>Pickup Location:</strong> {{ request.pickup_address }}</p>
                         <p><strong>Dropoff Location:</strong> {{ request.dropoff_address }}</p>
-                        <button class="btn">Update</button>
+                        <form method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="request_id" value="{{ request.id }}">
+                            <button type="submit" name="action" value="Complete" class="btn">Complete</button>
+                        </form>
                     </li>
                     {% empty %}
                     <li class="request">No accepted ride requests.</li>
@@ -148,10 +162,17 @@
         <div class="right-column">
             <div class="section">
                 <h2>Pending Ride Requests</h2>
+                {% if messages %}
+                    <ul class="messages">
+                        {% for message in messages %}
+                            <li class="message">{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
                 <ul class="requests">
                     {% for request in pending_ride_requests %}
                     <li class="request">
-                        <p><strong>Rider Name:</strong> {{ request.rider.user.username }}</p>
+                        <p><strong>Rider Name:</strong> {{ request.rider.user.first_name }} {{ request.rider.user.last_name }}</p>
                         <p><strong>Pickup Location:</strong> {{ request.pickup_address }}</p>
                         <p><strong>Dropoff Location:</strong> {{ request.dropoff_address }}</p>
                         <form method="post">
