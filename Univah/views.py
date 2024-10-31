@@ -125,3 +125,7 @@ class DriverHub(View):
 class Transpo(View):
     def get(self, request):
         return render(request, 'transpo-fix.html')
+
+class Maptest(View):
+    def get(self, request):
+        return render(request, 'nav.html')

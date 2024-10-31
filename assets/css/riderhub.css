@@ -1,0 +1,117 @@
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+    color: #333;
+}
+header {
+    background-color: #1e3a8a;
+    padding: 10px 20px;
+    height: auto;
+    position: relative;
+}
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: auto;
+}
+header h1 {
+    color: #fff;
+    font-size: 28px;
+    margin: 0;
+}
+header ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    margin: 0;
+}
+header ul li {
+    display: inline;
+}
+header ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 18px;
+}
+.user-name {
+    color: #fff;
+    font-size: 18px;
+    margin-left: auto;
+    margin-right: 10px;
+}
+.content {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    max-width: 1200px;
+    margin: auto;
+}
+#book-ride, #current-ride {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 48%;
+}
+#book-ride h2, #current-ride h2 {
+    margin-bottom: 20px;
+    color: #1e3a8a;
+}
+#book-ride form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+#book-ride input, #book-ride select, #book-ride button {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+button {
+    background-color: #00796b;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+button:hover {
+    background-color: #005f56;
+}
+#map {
+    height: 300px;
+    width: 80%;
+    margin: 0 auto;
+    margin-top: 20px;
+}
+.feature-grid, .reviews-grid {
+    display: flex;
+    gap: 20px;
+    justify-content: space-around;
+}
+.feature-item, .review {
+    max-width: 300px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+footer {
+    background-color: #1e3a8a;
+    padding: 20px;
+    text-align: center;
+    color: #fff;
+}
+@media (max-width: 768px) {
+    .content {
+        flex-direction: column;
+    }
+    #book-ride, #current-ride {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+}
