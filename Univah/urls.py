@@ -8,4 +8,3 @@ urlpatterns = [
     path('transpo/', views.Transpo.as_view(), name = 'transpo')
 ]
 
-

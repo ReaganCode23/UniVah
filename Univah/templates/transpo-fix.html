@@ -11,6 +11,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ride Service</title>
     <style>
+
         body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -50,6 +51,9 @@ header ul {
 
 header ul li {
     display: inline;
+}
+.right-align {
+    margin-left: auto;
 }
 
 header ul li a {
@@ -291,6 +295,22 @@ footer {
     .hero-image{
         margin-top: 16px;
     }
+    .nav-btn {
+            background-color: #1e3a8a;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+            transition: background-color 0.3s ease;
+        }
+        .nav-btn:hover {
+            background-color: #163d70;
+        }
 }
 
     </style>
@@ -299,14 +319,19 @@ footer {
     <header>
         <nav>
             <h1>UniVah</h1>
-            <ul>
-                <li><a href="#book-ride">Book a Ride</a></li>
-                <li><a href="#features">Features</a></li>
-                <li><a href="#reviews">Reviews</a></li>
-                <li><a href="#contact">Contact Us</a></li>
-            </ul>
-        </nav>
+            <ul> 
+                <li><a href="{% url 'driverhub' %}" class="nav-btn">Driver</a></li> 
+                <li><a href="{% url 'riderhub' %}" class="nav-btn">Rider</a></li> 
+                <li><a href="{% url 'register' %}" class="nav-btn">Register</a></li> 
+                <li><a href="#book-ride">Book a Ride</a></li> 
+                <li><a href="#features">Features</a></li> 
+                <li><a href="#reviews">Reviews</a></li> 
+                <li><a href="#contact">Contact Us</a></li> 
+                <li class="right-align"><a href="{% url 'login' %}" class="nav-btn">Login</a></li> 
+            </ul> 
+        </nav> 
     </header>
+            
 
     <section class="hero">
         <div class="hero-text">
