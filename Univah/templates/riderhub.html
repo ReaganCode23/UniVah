@@ -1,34 +1,46 @@
-{%load static%}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UniVah Ride Service</title>
-    
-    <!-- Leaflet CSS -->
+
+    <!-- Leaflet CSS & JS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <!-- Leaflet Control Geocoder -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+    <!-- Leaflet Routing Machine -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
-    
+    <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+
     <!-- Local CSS -->
     <link rel="stylesheet" href="{% static 'css/riderhub.css' %}">
 </head>
 <body>
     <header>
+        <img src="{% static 'images/univah.png' %}" alt="Description of your image" width="90" height="90">
         <nav>
             <h1>UniVah</h1>
             <ul>
-                <li><a href="#book-ride">Book a Ride</a></li>
-                <li><a href="{% url 'driverhub' %}">Rider</a></li>
+                <li><a href="{% url 'transpo' %}" class="nav-btn">Home</a></li>
+                <li><a href="{% url 'driverhub' %}" class="nav-btn">Driver</a></li>
+                <li><a href="{% url 'riderhub' %}" class="nav-btn">Book a Ride</a></li>
+                <li><a href="{% url 'register' %}" class="nav-btn">Register</a></li>
                 <li><a href="#features">Features</a></li>
                 <li><a href="#reviews">Reviews</a></li>
                 <li><a href="#contact">Contact Us</a></li>
-                <span class="user-name">{{ user.first_name }}</span>
+                {% if user.is_authenticated %}
+                    <li class="right-align"><a href="{% url 'logout' %}" class="nav-btn">Logout</a></li>
+                {% else %}
+                    <li class="right-align"><a href="{% url 'login' %}" class="nav-btn">Login</a></li>
+                {% endif %}
+                <span class="user-name">{{ user.username }}</span>
             </ul>
         </nav>
     </header>
-
     <div class="content">
         <section id="current-ride">
             {% if ride_request %}
@@ -46,78 +58,41 @@
                 <div id="ride-map">
                     <h3>Live Ride Tracking</h3>
                     <div id="map"></div>
-                    <p id="driver-location">Driver is on the way:</p>
                 </div>
             {% else %}
                 <h2>No Current Ride</h2>
                 <p>You can book a ride using the form on the right.</p>
             {% endif %}
         </section>
-
         <section id="book-ride">
-            <h2>Book Your Ride</h2>
-            <form id="ride-form" method="post" onsubmit="confirmRide(event)">
-                {% csrf_token %}
-                <label for="pickup">Pickup Location:</label>
-                {{ form.pickup_address }}
-                <label for="dropoff">Drop-off Location:</label>
-                {{ form.dropoff_address }}
-                <label for="schedule">Schedule:</label>
-                {{ form.booking_type }}
-                <button type="submit">Confirm Ride</button>
-            </form>
+            {% if not ride_request %}
+                <h2>Book Your Ride</h2>
+                <form id="ride-form" method="post" onsubmit="confirmRide(event)">
+                    {% csrf_token %}
+                    <label for="pickup">Pickup Location:</label>
+                    {{ form.pickup_address }}
+                    <label for="dropoff">Drop-off Location:</label>
+                    {{ form.dropoff_address }}
+                    <label for="schedule">Schedule:</label>
+                    {{ form.booking_type }}
+                    <button type="submit">Confirm Ride</button>
+                </form>
+            {% else %}
+            <div class="ride-in-progress-container"> 
+                <img src="{% static 'images/univahride.png' %}" alt="A Student Driver is on their way!"> 
+                <div class="ride-in-progress-text">A Student Driver is on their way!</div> 
+            </div>
+            {% endif %}
         </section>
     </div>
-
-    <section id="features">
-        <h2>Why RideWithEase?</h2>
-        <div class="feature-grid">
-            <div class="feature-item">
-                <h3>Real-Time Tracking</h3>
-                <p>Track your ride with GPS for accurate updates on your driver's location.</p>
-            </div>
-            <div class="feature-item">
-                <h3>Secure Payment Options</h3>
-                <p>Pay online or with cash—whichever you prefer, safely and securely.</p>
-            </div>
-            <div class="feature-item">
-                <h3>Verified Drivers</h3>
-                <p>Our drivers are verified with their SSN to ensure safety and trust.</p>
-            </div>
-        </div>
-    </section>
-
-    <section id="reviews">
-        <h2>Customer Reviews</h2>
-        <div class="reviews-grid">
-            <div class="review">
-                <p>"Amazing service! The ride was smooth, and the driver was punctual."</p>
-                <span>- John Doe</span>
-            </div>
-            <div class="review">
-                <p>"I love the real-time tracking feature. It makes everything so convenient."</p>
-                <span>- Sarah Lee</span>
-            </div>
-            <div class="review">
-                <p>"The option to schedule rides in advance is a life-saver."</p>
-                <span>- Mark Thompson</span>
-            </div>
-        </div>
-    </section>
-
-    <!-- Leaflet JavaScript Libraries -->
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
-    <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
-    
+    <div id="ride-data"
+        data-pickup="{{ ride_request.pickup_address }}"
+        data-dropoff="{{ ride_request.dropoff_address }}">
+    </div>
     <!-- Local JavaScript -->
     <script src="{% static 'js/map.js' %}"></script>
-    <script>
-        function confirmRide(event) {
-            // Add any client-side ride confirmation logic here
-            // This is just a placeholder
-            console.log('Ride confirmation logic');
-        }
-    </script>
+    <footer>
+        <p>&copy; 2024 UniVah. All rights reserved.</p>
+    </footer>
 </body>
 </html>
