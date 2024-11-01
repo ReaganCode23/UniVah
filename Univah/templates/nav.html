@@ -3,12 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Responsive Navbar with Centered Logo</title>
-    <link rel="stylesheet" href="nav.css">
- </head>
+    <title>UniVah - Taking You To Your Destination</title>
+    <link rel="stylesheet" href="univah.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+    <style>
+        #map {
+            height: 300px;
+            width: 80%;
+            margin: 0 auto;
+            margin-top: 20px;
+        }
+        .form-container {
+            display: flex;
+            flex-direction: column;
+            width: 80%;
+            margin: 0 auto;
+            padding: 10px;
+        }
+        .form-container input {
+            margin-bottom: 10px;
+            padding: 8px;
+            font-size: 16px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        .form-container button {
+            padding: 10px;
+            font-size: 16px;
+            background-color: #00796b;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .form-container button:hover {
+            background-color: #005a4a;
+        }
+        .hidden {
+            display: none;
+        }
+        .features, .reviews, .contact {
+            padding: 20px;
+        }
+        .feature-grid, .reviews-grid {
+            display: flex;
+            gap: 20px;
+            justify-content: space-around;
+        }
+        .feature-item, .review {
+            max-width: 300px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .contact-btn {
+            background-color: #00796b;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        footer {
+            background-color: #cc0000;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
 <body>
-
-    
+    <!-- Header Section -->
     <header>
         <nav>
             <h1>UniVah</h1>
@@ -18,11 +85,153 @@
                 <li><a href="#reviews">Reviews</a></li>
                 <li><a href="#contact">Contact Us</a></li>
             </ul>
+            <div>
+                <span>{{ user.username }}</span>
+                <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit">Logout</button>
+                </form>
+            </div>
         </nav>
     </header>
     
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-text">
+            <h2>Fast, Reliable, Affordable</h2>
+            <p>Book a ride anytime, anywhere.</p>
+            <a href="#book-ride" class="hero-btn">Book Now</a>
+        </div>
+        <img src="Pictures/Car ride.jpg" alt="Car ride image" class="hero-image">
+    </section>
     
+    <!-- Driver List Section -->
+    <section id="driver-list" class="form-container">
+        <h2>Driver List</h2>
+        <ul>
+            {% for driver in drivers %}
+                <li class="driver-item">
+                    <span class="driver-name">{{ driver.first_name }} {{ driver.last_name }}</span>
+                    <span class="driver-status">Status: {{ driver.get_status_display }}</span>
+                </li>
+            {% empty %}
+                <li class="no-drivers">No Drivers available.</li>
+            {% endfor %}
+        </ul>
+    </section>
 
-    <script src="nav.js"></script>
+    <!-- Book a Ride Section -->
+    <section id="book-ride" class="form-container">
+        <h2>Book Your Ride</h2>
+        <form method="post" action="" onsubmit="displayRoute(event)">
+            {% csrf_token %}
+            <div>
+                <label for="driver">Driver</label>
+                {{ form.driver }}
+            </div>
+            <div>
+                <label for="pickup_address">Pickup Address</label>
+                {{ form.pickup_address }}
+            </div>
+            <div>
+                <label for="dropoff_address">Dropoff Address</label>
+                {{ form.dropoff_address }}
+            </div>
+            <button type="submit">Submit</button>
+        </form>
+    </section>
+
+    <!-- Ride Details Output -->
+    <div id="ride-details" class="hidden">
+        <h3>Ride Details</h3>
+        <p id="ride-summary"></p>
+        <p><strong>Estimated Fare:</strong> $<span id="fare"></span></p>
+        <button onclick="startTracking()">Track Ride</button>
+    </div>
+
+    <!-- Ride Tracking Map (Simulated) -->
+    <section>
+    <div id="ride-map">
+        <h3>Live Ride Tracking</h3>
+        <div id="map"></div>
+        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+        <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+        <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+        <script>
+            // Initialize map
+            var map = L.map('map').setView([37.7749, -122.4194], 13); // Default to San Francisco or any central location
+            // Add OpenStreetMap tile layer
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+
+            // Function to geocode addresses and display route
+            function displayRoute(event) {
+                event.preventDefault();
+                var pickupAddress = document.querySelector('[name="pickup_address"]').value;
+                var dropoffAddress = document.querySelector('[name="dropoff_address"]').value;
+                // Create geocoder instance
+                var geocoder = L.Control.Geocoder.nominatim();
+                // Geocode pickup address
+                geocoder.geocode(pickupAddress, function(pickupResults) {
+                    if (pickupResults.length > 0) {
+                        var pickupLatLng = pickupResults[0].center;
+                        // Geocode dropoff address
+                        geocoder.geocode(dropoffAddress, function(dropoffResults) {
+                            if (dropoffResults.length > 0) {
+                                var dropoffLatLng = dropoffResults[0].center;
+                                // Clear previous route (if any)
+                                if (window.routeControl) {
+                                    map.removeControl(window.routeControl);
+                                }
+                                // Display route between pickup and dropoff locations
+                                window.routeControl = L.Routing.control({
+                                    waypoints: [L.latLng(pickupLatLng), L.latLng(dropoffLatLng)],
+                                    routeWhileDragging: true,
+                                    createMarker: function() { return null; } // Hide markers if not needed
+                                }).addTo(map);
+                            } else {
+                                alert("Dropoff location not found.");
+                            }
+                        });
+                    } else {
+                        alert("Pickup location not found.");
+                    }
+                });
+            }
+        </script>
+        <p id="driver-location">Driver is on the way.</p>
+    </div>
+</section>
+    
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <h2>Why UniVah</h2>
+        <div class="feature-grid">
+            <div class="feature-item">
+                <img src="Pictures/GPS tracking.jpg" alt="GPS Tracking">
+                <h3>Real-Time Tracking</h3>
+                <p>Track your ride with GPS for accurate updates on your driver's location.</p>
+            </div>
+            <div class="feature-item">
+                <img src="Pictures/Payment.jpg" alt="Payment Options">
+                <h3>Secure Payment Options</h3>
+                <p>Pay online or with cash-whichever you prefer, safely and securely.</p>
+            </div>
+            <div class="feature-item">
+                <img src="Pictures/Driver secure.jpg" alt="Verified Drivers">
+                <h3>Verified Drivers</h3>
+                <p>Our drivers are verified to ensure safety and trust.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Review Section -->
+    <section id="reviews" class="reviews">
+        <h2>Customer Reviews</h2>
+        <div class="reviews-grid">
+            <div class="review">
+    </section>
 </body>
 </html>

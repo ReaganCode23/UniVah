@@ -1,120 +1,123 @@
+{%load static%}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StudentRiderHub</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f5f5f5;
-        }
-        header {
-            background-color: #003366;
-            color: #fff;
-            padding: 1em;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .logo {
-            font-size: 1.5em;
-            font-weight: bold;
-        }
-        .title {
-            font-size: 2.5em;
-            text-align: center;
-        }
-        .signin {
-            font-size: 1em;
-        }
-        .content {
-            padding: 2em;
-        }
-        .section {
-            background-color: #fff;
-            padding: 1.5em;
-            margin-bottom: 1.5em;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        .section h2 {
-            margin-top: 0;
-            color: #003366;
-        }
-        .form-group {
-            margin-bottom: 1em;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5em;
-        }
-        .form-group input, .form-group textarea {
-            width: 100%;
-            padding: 0.5em;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        .form-group textarea {
-            height: 100px;
-        }
-        .btn {
-            background-color: #003366;
-            color: #fff;
-            padding: 0.75em 1.5em;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .btn:hover {
-            background-color: #002244;
-        }
-    </style>
+    <title>UniVah Ride Service</title>
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+    
+    <!-- Local CSS -->
+    <link rel="stylesheet" href="{% static 'css/riderhub.css' %}">
 </head>
 <body>
     <header>
-        <div class="logo">UniVah</div>
-        <div class="signin">
-            <form action="{% url 'logout' %}" method="get">
-                <button type="submit">Logout</button>
-            </form>
-            <span>{{ user.username }}</span>
-        </div>
+        <nav>
+            <h1>UniVah</h1>
+            <ul>
+                <li><a href="#book-ride">Book a Ride</a></li>
+                <li><a href="{% url 'driverhub' %}">Rider</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#reviews">Reviews</a></li>
+                <li><a href="#contact">Contact Us</a></li>
+                <span class="user-name">{{ user.first_name }}</span>
+            </ul>
+        </nav>
     </header>
-    <div class="title">StudentRiderHub</div>
+
     <div class="content">
-        <div class="section">
-            <h2>Available Drivers</h2>
-            <p>Number of drivers available: <span id="driver-count">{{ drivers.count }}</span></p>
-        </div>
-        <div class="section">
-            <h2>Book Ride</h2>
-            <form method="post" action="">
+        <section id="current-ride">
+            {% if ride_request %}
+                <h2>Your Current Ride</h2>
+                <p><strong>Status:</strong> {{ ride_request.status }}</p>
+                <p><strong>Pickup Location:</strong> {{ ride_request.pickup_address }}</p>
+                <p><strong>Drop-off Location:</strong> {{ ride_request.dropoff_address }}</p>
+                <p><strong>Booking Type:</strong> {{ ride_request.booking_type }}</p>
+                <p><strong>Driver:</strong> {{ ride_request.driver.user.first_name }} {{ ride_request.driver.user.last_name }}</p>
+                <p><strong>Driver Contact:</strong> {{ ride_request.driver.phone_number }}</p>
+                <p><strong>Vehicle Model:</strong> {{ ride_request.driver.vehicle_type}}</p>
+                <p><strong>Vehicle Color:</strong> {{ ride_request.driver.vehicle_color}}</p>
+                <p><strong>License Plate:</strong> {{ ride_request.driver.license_number}}</p>
+                <p>Once the ride is completed, you can book another ride.</p>
+                <div id="ride-map">
+                    <h3>Live Ride Tracking</h3>
+                    <div id="map"></div>
+                    <p id="driver-location">Driver is on the way:</p>
+                </div>
+            {% else %}
+                <h2>No Current Ride</h2>
+                <p>You can book a ride using the form on the right.</p>
+            {% endif %}
+        </section>
+
+        <section id="book-ride">
+            <h2>Book Your Ride</h2>
+            <form id="ride-form" method="post" onsubmit="confirmRide(event)">
                 {% csrf_token %}
-                <div class="form-group">
-                    <label for="pickup_address">Pickup Location:</label>
-                    {{ form.pickup_address }}
-                </div>
-                <div class="form-group">
-                    <label for="dropoff_address">Dropoff Location:</label>
-                    {{ form.dropoff_address }}
-                </div>
-                <button type="submit" class="btn">Submit</button>
+                <label for="pickup">Pickup Location:</label>
+                {{ form.pickup_address }}
+                <label for="dropoff">Drop-off Location:</label>
+                {{ form.dropoff_address }}
+                <label for="schedule">Schedule:</label>
+                {{ form.booking_type }}
+                <button type="submit">Confirm Ride</button>
             </form>
-        </div>
-        <div class="section">
-            <h2>Rider Status</h2>
-            <p>Status: <span id="rider-status">{{ride_request.status}}</span></p>
-        </div>
-        <div class="section">
-            <h2>Ride Details</h2>
-            <p>Driver's Name: <span id="driver-name">John Doe</span></p>
-            <p>Car Model and Color: <span id="car-model">Toyota Camry, Red</span></p>
-            <p>License Plate: <span id="license-plate">XYZ 1234</span></p>
-            <p>ETA: <span id="eta">10 minutes</span></p>
-        </div>
+        </section>
     </div>
+
+    <section id="features">
+        <h2>Why RideWithEase?</h2>
+        <div class="feature-grid">
+            <div class="feature-item">
+                <h3>Real-Time Tracking</h3>
+                <p>Track your ride with GPS for accurate updates on your driver's location.</p>
+            </div>
+            <div class="feature-item">
+                <h3>Secure Payment Options</h3>
+                <p>Pay online or with cash—whichever you prefer, safely and securely.</p>
+            </div>
+            <div class="feature-item">
+                <h3>Verified Drivers</h3>
+                <p>Our drivers are verified with their SSN to ensure safety and trust.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="reviews">
+        <h2>Customer Reviews</h2>
+        <div class="reviews-grid">
+            <div class="review">
+                <p>"Amazing service! The ride was smooth, and the driver was punctual."</p>
+                <span>- John Doe</span>
+            </div>
+            <div class="review">
+                <p>"I love the real-time tracking feature. It makes everything so convenient."</p>
+                <span>- Sarah Lee</span>
+            </div>
+            <div class="review">
+                <p>"The option to schedule rides in advance is a life-saver."</p>
+                <span>- Mark Thompson</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Leaflet JavaScript Libraries -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+    
+    <!-- Local JavaScript -->
+    <script src="{% static 'js/map.js' %}"></script>
+    <script>
+        function confirmRide(event) {
+            // Add any client-side ride confirmation logic here
+            // This is just a placeholder
+            console.log('Ride confirmation logic');
+        }
+    </script>
 </body>
 </html>
