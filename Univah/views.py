@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 from . import models, forms
 
 class Home(View):
@@ -24,6 +25,10 @@ class RiderHub(View):
             'ride_request': ride_request,
         }
         return render(request, 'riderhub.html', context)
+        if request.user.is_authenticated:
+            return render(request, 'riderhub.html', {'form': form, 'drivers': drivers, 'user': request.user})
+        else:
+             return redirect('login')
 
     def post(self, request):
         # Handle the ride booking form submission
@@ -122,6 +127,14 @@ class DriverHub(View):
 
 
 
+        ride_requests = models.RideRequest.objects.filter(driver=None, status='Pending')  # Only show pending requests
+        if request.user.is_authenticated:
+                    return render(request, 'driverhub.html', {'ride_requests': ride_requests})
+        else:
+             return redirect('login')
+
+            
+    
 class Transpo(View):
     def get(self, request):
         return render(request, 'transpo-fix.html')

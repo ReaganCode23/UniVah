@@ -9,4 +9,3 @@ urlpatterns = [
     path('maptest', views.Maptest.as_view(), name = 'maptest'),
 ]
 
-
