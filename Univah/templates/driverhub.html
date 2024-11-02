@@ -9,18 +9,27 @@
 </head>
 <body>
     <header>
+        <img src="{% static 'images/univah.png' %}" alt="Description of your image" width="90" height="90
+">
+        
         <nav>
             <h1>UniVah</h1>
-            <ul>
-                <li><a href="#book-ride">Book a Ride</a></li>
-                <li><a href="{% url 'riderhub' %}">Rider</a></li>
-                <li><a href="#features">Features</a></li>
-                <li><a href="#reviews">Reviews</a></li>
-                <li><a href="#contact">Contact Us</a></li>
-                <span class="user-name">{{ user.first_name }}</span>
-            </ul>
-
-        </nav>
+            <ul> 
+                <li><a href="{% url 'transpo' %}" class="nav-btn">Home</a></li>
+                <li><a href="{% url 'driverhub' %}" class="nav-btn">Driver</a></li> 
+                <li><a href="{% url 'riderhub' %}" class="nav-btn">Book a Ride</a></li> 
+                <li><a href="{% url 'register' %}" class="nav-btn">Register</a></li> 
+                <li><a href="#features">Features</a></li> 
+                <li><a href="#reviews">Reviews</a></li> 
+                <li><a href="#contact">Contact Us</a></li> 
+                {% if user.is_authenticated %}
+                    <li class="right-align"><a href="{% url 'logout' %}" class="nav-btn">Logout</a></li> 
+                {% else %} 
+                    <li class="right-align"><a href="{% url 'login' %}" class="nav-btn">Login</a></li> 
+                {% endif %} 
+                <span class="user-name">{{ user.username }}</span>
+            </ul> 
+        </nav> 
     </header>
 
     <div class="content">
@@ -79,7 +88,5 @@
     <footer>
         <p>&copy; 2024 UniVah. All rights reserved.</p>
     </footer>
-
-    <script src="transportation.js"></script>
 </body>
 </html>

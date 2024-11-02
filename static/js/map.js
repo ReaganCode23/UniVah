@@ -1,71 +1,58 @@
-function initializeMap() {
-    // Initialize map
-    var map = L.map('map').setView([37.7749, -122.4194], 13);
-    
-    // Add OpenStreetMap tile layer
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '© OpenStreetMap contributors'
-    }).addTo(map);
+// Initialize the map
+var map = L.map('map').setView([51.505, -0.09], 13);
 
-    // Function to display route
-    function displayRoute() {
-        var pickupAddress = document.getElementById('pickup');
-        var dropoffAddress = document.getElementById('dropoff');
-        
-        // Create geocoder instance
-        var geocoder = L.Control.Geocoder.nominatim();
-        
-        // Geocode pickup address
-        geocoder.geocode(pickupAddress, function(pickupResults) {
-            if (pickupResults.length > 0) {
-                var pickupLatLng = pickupResults[0].center;
-                
-                // Geocode dropoff address
-                geocoder.geocode(dropoffAddress, function(dropoffResults) {
-                    if (dropoffResults.length > 0) {
-                        var dropoffLatLng = dropoffResults[0].center;
-                        
-                        // Clear previous route (if any)
-                        if (window.routeControl) {
-                            map.removeControl(window.routeControl);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
+
+// Initialize the geocoder
+var geocoder = L.Control.Geocoder.nominatim();
+
+var rideData = document.getElementById("ride-data");
+var pickupAddress = rideData.getAttribute("data-pickup");
+var dropoffAddress = rideData.getAttribute("data-dropoff");
+// Check the pickup and dropoff addresses
+console.log("Pickup Address:", pickupAddress);
+console.log("Dropoff Address:", dropoffAddress);
+
+// Geocode the pickup location
+geocoder.geocode(pickupAddress, function(pickupResults) {
+    if (pickupResults && pickupResults.length > 0) {
+        var pickupLatLng = pickupResults[0].center;
+        L.marker(pickupLatLng).addTo(map).bindPopup("Pickup Location").openPopup();
+
+        // Geocode the dropoff location
+        geocoder.geocode(dropoffAddress, function(dropoffResults) {
+            if (dropoffResults && dropoffResults.length > 0) {
+                var dropoffLatLng = dropoffResults[0].center;
+                L.marker(dropoffLatLng).addTo(map).bindPopup("Dropoff Location");
+
+                // Calculate and display the route using OSRM
+                var osrmUrl = `https://router.project-osrm.org/route/v1/driving/${pickupLatLng.lng},${pickupLatLng.lat};${dropoffLatLng.lng},${dropoffLatLng.lat}?overview=full&geometries=geojson`;
+
+                fetch(osrmUrl)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.routes && data.routes.length > 0) {
+                            var routeCoordinates = data.routes[0].geometry.coordinates.map(coord => [coord[1], coord[0]]);
+                            var route = L.polyline(routeCoordinates, { color: 'blue' }).addTo(map);
+                            map.fitBounds(route.getBounds());
+                        } else {
+                            console.error('Route not found in OSRM response:', data);
+                            alert('Route not found');
                         }
-                        
-                        // Display route between pickup and dropoff locations
-                        window.routeControl = L.Routing.control({
-                            waypoints: [
-                                L.latLng(pickupLatLng),
-                                L.latLng(dropoffLatLng)
-                            ],
-                            routeWhileDragging: true,
-                            createMarker: function(i, waypoint) {
-                                var markerIcon = L.divIcon({
-                                    className: 'custom-marker',
-                                    html: i === 0 ? '🏁' : '🏠',
-                                    iconSize: [30, 30]
-                                });
-                                return L.marker(waypoint.latLng, { icon: markerIcon });
-                            }
-                        }).addTo(map);
-                        
-                        // Fit map to show entire route
-                        map.fitBounds([pickupLatLng, dropoffLatLng]);
-                    } else {
-                        alert("Dropoff location not found.");
-                    }
-                });
+                    })
+                    .catch(error => {
+                        console.error('Error fetching route:', error);
+                        alert('Failed to calculate route');
+                    });
             } else {
-                alert("Pickup location not found.");
+                console.error('Dropoff location geocoding failed:', dropoffResults);
+                alert('Dropoff location not found');
             }
         });
+    } else {
+        console.error('Pickup location geocoding failed:', pickupResults);
+        alert('Pickup location not found');
     }
-
-    // Add event listener to display route when form is submitted
-    document.getElementById('ride-form').addEventListener('submit', function(event) {
-        event.preventDefault();
-        displayRoute();
-    });
-}
-
-// Call initializeMap when the page loads
-window.onload = initializeMap;
+});
