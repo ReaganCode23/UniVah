@@ -13,7 +13,7 @@ class RiderHub(View):
     def get(self, request):
         user=request.user
         is_rider = models.Rider.objects.filter(user=user).exists()
-        if user.is_authenticated and request.user == is_rider:
+        if user.is_authenticated: #and request.user == is_rider:
             # Initialize the booking form
             form = forms.Bookride()
             # Retrieve available drivers
@@ -86,7 +86,7 @@ class DriverHub(View):
         #Initialize context
         user = request.user # Assuming you have user authentication in place 
         is_driver = models.Driver.objects.filter(user=user).exists() 
-        if user.is_authenticated and user == is_driver:
+        if user.is_authenticated: #and user == is_driver:
             driver = models.Driver.objects.get(user=request.user)
             accepted_ride_requests = models.RideRequest.objects.filter(status='Accepted', driver=driver)
             ride_requests = models.RideRequest.objects.filter(status='Pending')
