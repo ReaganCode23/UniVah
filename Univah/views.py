@@ -11,24 +11,27 @@ class Home(View):
 
 class RiderHub(View):
     def get(self, request):
-        # Initialize the booking form
-        form = forms.Bookride()
-        # Retrieve available drivers
-        drivers = models.Driver.objects.filter(status='available')
-        # Check for an ongoing ride request
-        ride_request = models.RideRequest.objects.filter(rider__user=request.user, status='Accepted').first()
+        user=request.user
+        is_rider = models.Rider.objects.filter(user=user).exists()
+        if user.is_authenticated and request.user == is_rider:
+            # Initialize the booking form
+            form = forms.Bookride()
+            # Retrieve available drivers
+            drivers = models.Driver.objects.filter(status='available')
+            # Check for an ongoing ride request
+            ride_request = models.RideRequest.objects.filter(rider__user=request.user, status='Accepted').first()
 
-        context = {
-            'form': form if not ride_request else None,
-            'drivers': drivers,
-            'user': request.user,
-            'ride_request': ride_request,
-        }
-        return render(request, 'riderhub.html', context)
-        if request.user.is_authenticated:
-            return render(request, 'riderhub.html', {'form': form, 'drivers': drivers, 'user': request.user})
+            context = {
+                'form': form if not ride_request else None,
+                'drivers': drivers,
+                'user': request.user,
+                'ride_request': ride_request,
+            }
+
+            return render(request, 'riderhub.html', context)
         else:
              return redirect('login')
+        
 
     def post(self, request):
         # Handle the ride booking form submission
@@ -81,14 +84,19 @@ from django.contrib import messages
 class DriverHub(View):
     def get(self, request):
         #Initialize context
-        driver = models.Driver.objects.get(user=request.user)
-        accepted_ride_requests = models.RideRequest.objects.filter(status='Accepted', driver=driver)
-        ride_requests = models.RideRequest.objects.filter(status='Pending')
-        return render(request, 'driverhub.html', {
-            'accepted_ride_requests': accepted_ride_requests,
-            'pending_ride_requests': ride_requests,
-            'user': request.user
-        })
+        user = request.user # Assuming you have user authentication in place 
+        is_driver = models.Driver.objects.filter(user=user).exists() 
+        if user.is_authenticated and user == is_driver:
+            driver = models.Driver.objects.get(user=request.user)
+            accepted_ride_requests = models.RideRequest.objects.filter(status='Accepted', driver=driver)
+            ride_requests = models.RideRequest.objects.filter(status='Pending')
+            return render(request, 'driverhub.html', {
+                'accepted_ride_requests': accepted_ride_requests,
+                'pending_ride_requests': ride_requests,
+                'user': request.user
+            })
+        else:
+            return redirect('login')
 
     def post(self, request):
         #get riderequest id from accept button
