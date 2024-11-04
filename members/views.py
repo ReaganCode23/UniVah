@@ -73,11 +73,11 @@ class UserEditView(generic.UpdateView):
             if form.cleaned_data.get('is_rider', False):
                 rider, created = Rider.objects.get_or_create(user=user)
                 rider.major = form.cleaned_data.get('academic_major')
+                rider.save()
             else:
                 Rider.objects.filter(user=user).delete()
             
             # Save the user instance
-            rider.save()
             user.save()
             form.save_m2m()  # Save many-to-many relationships if any
             

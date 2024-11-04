@@ -14,20 +14,33 @@ class Home(View):
 class RiderHub(View):
     def get(self, request):
         # Initialize the booking form
-        form = forms.Bookride()
-        # Retrieve available drivers
-        drivers = models.Driver.objects.filter(status='available')
-        # Check for an ongoing ride request
-        accepted_ride_request = models.RideRequest.objects.filter(rider__user=request.user, status='Accepted').first()
-        ride_request = models.RideRequest.objects.filter(rider__user=request.user, status ='Pending').first()
-        context = {
-            'form': form if not accepted_ride_request else None,
-            'drivers': drivers,
-            'user': request.user,
-            'pending_ride_request': ride_request,
-            'accepted_ride_request': accepted_ride_request,
-        }
-        return render(request, 'riderhub.html', context)
+        #Initialize context
+        user = request.user # Assuming you have user authentication in place 
+        #check if user is loged in
+        if user.is_authenticated:
+            #check if user is rider
+            is_rider = models.Rider.objects.filter(user=user).exists()
+            if is_rider:
+                form = forms.Bookride()
+                # Retrieve available drivers
+                drivers = models.Driver.objects.filter(status='available')
+                # Check for an ongoing ride request
+                accepted_ride_request = models.RideRequest.objects.filter(rider__user=request.user, status='Accepted').first()
+                ride_request = models.RideRequest.objects.filter(rider__user=request.user, status ='Pending').first()
+                context = {
+                    'form': form if not accepted_ride_request else None,
+                    'drivers': drivers,
+                    'user': request.user,
+                    'pending_ride_request': ride_request,
+                    'accepted_ride_request': accepted_ride_request,
+                }
+                return render(request, 'riderhub.html', context)
+            #send home if not rider
+            else:
+                return redirect('transpo')
+        #send to login if not logged in
+        else:
+            return redirect('login')
 
     def post(self, request):
         # Handle the ride booking form submission
@@ -73,29 +86,31 @@ class RiderHub(View):
         return redirect('riderhub')  # Redirect back to the hub
 
 
-
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib import messages
-
-@method_decorator(login_required, name = 'dispatch')
 class DriverHub(View):
     def get(self, request):
         #Initialize context
         user = request.user # Assuming you have user authentication in place 
-        is_driver = models.Driver.objects.filter(user=user).exists()
+        #check if user is loged in
         if user.is_authenticated:
-            driver = models.Driver.objects.get(user=request.user)
-            accepted_ride_requests = models.RideRequest.objects.filter(status='Accepted', driver=driver)
-            ride_requests = models.RideRequest.objects.filter(status='Pending')
-            activedrivers = models.Driver.objects.filter(status = 'Available')
-            return render(request, 'driverhub.html', {
-                'accepted_ride_requests': accepted_ride_requests,
-                'pending_ride_requests': ride_requests,
-                'user': request.user,
-                'activedrivers': activedrivers
-            })
+            #check if user is driver
+            is_driver = models.Driver.objects.filter(user=user).exists()
+            if is_driver:
+                driver = models.Driver.objects.get(user=request.user)
+                accepted_ride_requests = models.RideRequest.objects.filter(status='Accepted', driver=driver)
+                ride_requests = models.RideRequest.objects.filter(status='Pending')
+                activedrivers = models.Driver.objects.filter(status = 'Available')
+                return render(request, 'driverhub.html', {
+                    'accepted_ride_requests': accepted_ride_requests,
+                    'pending_ride_requests': ride_requests,
+                    'user': request.user,
+                    'activedrivers': activedrivers
+                })
+            #redirect home if not a driver
+            else:
+                return redirect('transpo')
+        #redirect loggin if not logged in
         else:
-            return redirect('transpo')
+            return redirect('login')
 
     def post(self, request):
         #get riderequest id from accept button
