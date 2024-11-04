@@ -13,6 +13,7 @@ header {
     display: flex;
     align-items: center;
 }
+
 nav {
     display: flex;
     flex-direction: column;
@@ -33,6 +34,7 @@ header h1 {
     font-size: 28px;
     margin: 0;
 }
+
 header ul {
     list-style: none;
     display: flex;
@@ -41,12 +43,14 @@ header ul {
     justify-content: flex-start;
     width: 100%;
 }
+
 .user-name {
     color: #fff;
     font-size: 18px;
     margin-left: auto;
     margin-right: 10px;
 }
+
 header ul li a {
     color: #fff;
     text-decoration: none;
@@ -60,31 +64,28 @@ header ul li a {
     max-width: 1200px;
     margin: auto;
 }
+
 .left-column {
     flex: 2;
 }
+
 .right-column {
     flex: 1;
 }
+
 .section {
     background-color: #fff;
     padding: 1.5em;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin-bottom: 1.5em;
 }
+
 .requests {
     list-style-type: none;
     padding: 0;
-    max-height: 400px;
-    overflow-y: auto;
 }
-.request {
-    background-color: #e3e3e3;
-    margin: 0.5em 0;
-    padding: 1em;
-    border-radius: 4px;
-}
+
+
 .btn {
     background-color: #1e3a8a;
     color: #fff;
@@ -93,14 +94,17 @@ header ul li a {
     border-radius: 4px;
     cursor: pointer;
 }
+
 .btn:hover {
     background-color: #164282;
 }
+
 .messages {
     list-style: none;
     padding: 0;
     margin: 0 0 1em 0;
 }
+
 .message {
     background-color: #ffdddd; /* Light red background */
     color: #d8000c; /* Dark red text */
@@ -110,6 +114,7 @@ header ul li a {
     border: 1px solid #d8000c; /* Dark red border */
     border-radius: 4px;
 }
+
 footer {
     background-color: #1e3a8a;
     color: #fff;
@@ -117,8 +122,16 @@ footer {
     padding: 15px;
     margin-top: 2em;
 }
+
 @media (max-width: 768px) {
     .content {
         flex-direction: column; /* Stack columns on small screens */
     }
+}
+
+#map {
+    height: 300px;
+    width: 80%;
+    margin: 0 auto;
+    margin-top: 20px;
 }

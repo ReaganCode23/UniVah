@@ -16,19 +16,16 @@ class RiderHub(View):
         # Retrieve available drivers
         drivers = models.Driver.objects.filter(status='available')
         # Check for an ongoing ride request
-        ride_request = models.RideRequest.objects.filter(rider__user=request.user, status='Accepted').first()
-
+        accepted_ride_request = models.RideRequest.objects.filter(rider__user=request.user, status='Accepted').first()
+        ride_request = models.RideRequest.objects.filter(rider__user=request.user, status ='Pending').first()
         context = {
-            'form': form if not ride_request else None,
+            'form': form if not accepted_ride_request else None,
             'drivers': drivers,
             'user': request.user,
-            'ride_request': ride_request,
+            'pending_ride_request': ride_request,
+            'accepted_ride_request': accepted_ride_request,
         }
         return render(request, 'riderhub.html', context)
-        if request.user.is_authenticated:
-            return render(request, 'riderhub.html', {'form': form, 'drivers': drivers, 'user': request.user})
-        else:
-             return redirect('login')
 
     def post(self, request):
         # Handle the ride booking form submission
@@ -84,10 +81,12 @@ class DriverHub(View):
         driver = models.Driver.objects.get(user=request.user)
         accepted_ride_requests = models.RideRequest.objects.filter(status='Accepted', driver=driver)
         ride_requests = models.RideRequest.objects.filter(status='Pending')
+        activedrivers = models.Driver.objects.filter(status = 'Available')
         return render(request, 'driverhub.html', {
             'accepted_ride_requests': accepted_ride_requests,
             'pending_ride_requests': ride_requests,
-            'user': request.user
+            'user': request.user,
+            'activedrivers': activedrivers
         })
 
     def post(self, request):
@@ -96,6 +95,7 @@ class DriverHub(View):
         action = request.POST.get('action')
         #get current driver
         driver = models.Driver.objects.get(user=request.user)
+        
 
         if not request_id:
             return redirect('driverhub')  # Handle gracefully if request_id is missing
@@ -124,14 +124,6 @@ class DriverHub(View):
             driver.save()
 
         return redirect('driverhub')
-
-
-
-        ride_requests = models.RideRequest.objects.filter(driver=None, status='Pending')  # Only show pending requests
-        if request.user.is_authenticated:
-                    return render(request, 'driverhub.html', {'ride_requests': ride_requests})
-        else:
-             return redirect('login')
 
             
     

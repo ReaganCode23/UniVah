@@ -4,8 +4,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'css/driverhub.css' %}">
     <title>Driver Hub - UniVah</title>
+     <!-- Leaflet CSS & JS -->
+     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+     <!-- Leaflet Control Geocoder -->
+     <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+     <!-- Leaflet Routing Machine -->
+     <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+     <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+
+     <link rel="stylesheet" href="{% static 'css/driverhub.css' %}">
+     
 </head>
 <body>
     <header>
@@ -42,6 +53,17 @@
                         <p><strong>Rider Name:</strong> {{ request.rider.user.first_name }} {{ request.rider.user.last_name }}</p>
                         <p><strong>Pickup Location:</strong> {{ request.pickup_address }}</p>
                         <p><strong>Dropoff Location:</strong> {{ request.dropoff_address }}</p>
+                        
+                        <div id="ride-data"
+                            data-pickup="{{ request.pickup_address}}"
+                            data-dropoff="{{ request.dropoff_address}}">
+                        </div>
+        
+                        <div id="ride-map">
+                            <h3>GPS Directions</h3>
+                            <div id="map"></div>
+                        </div>
+
                         <form method="post">
                             {% csrf_token %}
                             <input type="hidden" name="request_id" value="{{ request.id }}">
@@ -71,6 +93,7 @@
                         <p><strong>Rider Name:</strong> {{ request.rider.user.first_name }} {{ request.rider.user.last_name }}</p>
                         <p><strong>Pickup Location:</strong> {{ request.pickup_address }}</p>
                         <p><strong>Dropoff Location:</strong> {{ request.dropoff_address }}</p>
+        
                         <form method="post">
                             {% csrf_token %}
                             <input type="hidden" name="request_id" value="{{ request.id }}">
@@ -88,5 +111,7 @@
     <footer>
         <p>&copy; 2024 UniVah. All rights reserved.</p>
     </footer>
+     <!-- Local JavaScript -->
+     <script src="{% static 'js/map.js' %}"></script>
 </body>
 </html>

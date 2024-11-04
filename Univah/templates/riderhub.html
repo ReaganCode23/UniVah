@@ -43,29 +43,43 @@
     </header>
     <div class="content">
         <section id="current-ride">
-            {% if ride_request %}
+            {% if accepted_ride_request %}
                 <h2>Your Current Ride</h2>
-                <p><strong>Status:</strong> {{ ride_request.status }}</p>
-                <p><strong>Pickup Location:</strong> {{ ride_request.pickup_address }}</p>
-                <p><strong>Drop-off Location:</strong> {{ ride_request.dropoff_address }}</p>
-                <p><strong>Booking Type:</strong> {{ ride_request.booking_type }}</p>
-                <p><strong>Driver:</strong> {{ ride_request.driver.user.first_name }} {{ ride_request.driver.user.last_name }}</p>
-                <p><strong>Driver Contact:</strong> {{ ride_request.driver.phone_number }}</p>
-                <p><strong>Vehicle Model:</strong> {{ ride_request.driver.vehicle_type}}</p>
-                <p><strong>Vehicle Color:</strong> {{ ride_request.driver.vehicle_color}}</p>
-                <p><strong>License Plate:</strong> {{ ride_request.driver.license_number}}</p>
+                <p><strong>Status:</strong> {{ accepted_ride_request.status }}</p>
+                <p><strong>Pickup Location:</strong> {{ accepted_ride_request.pickup_address }}</p>
+                <p><strong>Drop-off Location:</strong> {{ accepted_ride_request.dropoff_address }}</p>
+                <p><strong>Booking Type:</strong> {{ accepted_ride_request.booking_type }}</p>
+                <p><strong>Driver:</strong> {{ accepted_ride_request.driver.user.first_name }} {{ ride_request.driver.user.last_name }}</p>
+                <p><strong>Driver Contact:</strong> {{ accepted_ride_request.driver.phone_number }}</p>
+                <p><strong>Vehicle Model:</strong> {{ accepted_ride_request.driver.vehicle_type}}</p>
+                <p><strong>Vehicle Color:</strong> {{ accepted_ride_request.driver.vehicle_color}}</p>
+                <p><strong>License Plate:</strong> {{ accepted_ride_request.driver.license_number}}</p>
                 <p>Once the ride is completed, you can book another ride.</p>
+                <div id="ride-data"
+                        data-pickup="{{ accepted_ride_request.pickup_address}}"
+                        data-dropoff="{{ accepted_ride_request.dropoff_address }}">
+                </div>
                 <div id="ride-map">
-                    <h3>Live Ride Tracking</h3>
+                    <h3>GPS Directions</h3>
                     <div id="map"></div>
                 </div>
-            {% else %}
-                <h2>No Current Ride</h2>
-                <p>You can book a ride using the form on the right.</p>
+            {% elif pending_ride_request %}
+                <h2>Congratualtions {{user.first_name}}! Your ride is currently Pending. We will notify you if accpeted</h2>
+                <div id="ride-data"
+                        data-pickup="{{ pending_ride_request.pickup_address}}"
+                        data-dropoff="{{ pending_ride_request.dropoff_address }}">
+                </div>
+                <div id="ride-map">
+                    <h3>GPS Directions</h3>
+                    <div id="map"></div>
+                </div>
+            {%else%}
+                <h2>No current Rides Avalaible</h2>
+                <p>Please book a ride on the form to the right.</p>
             {% endif %}
         </section>
         <section id="book-ride">
-            {% if not ride_request %}
+            {% if not accepted_ride_request and not pending_ride_request%}
                 <h2>Book Your Ride</h2>
                 <form id="ride-form" method="post" onsubmit="confirmRide(event)">
                     {% csrf_token %}
@@ -77,6 +91,13 @@
                     {{ form.booking_type }}
                     <button type="submit">Confirm Ride</button>
                 </form>
+            {%elif pending_ride_request%}
+                <div class="ride-in-progress-container"> 
+                    <img src="{% static 'images/univahwaiting.jpg' %}" alt="It won't be long!"> 
+                    <div class="ride-in-progress-text">It won't be Long!</div> 
+                </div>
+
+
             {% else %}
             <div class="ride-in-progress-container"> 
                 <img src="{% static 'images/univahride.png' %}" alt="A Student Driver is on their way!"> 
@@ -84,10 +105,6 @@
             </div>
             {% endif %}
         </section>
-    </div>
-    <div id="ride-data"
-        data-pickup="{{ ride_request.pickup_address }}"
-        data-dropoff="{{ ride_request.dropoff_address }}">
     </div>
     <!-- Local JavaScript -->
     <script src="{% static 'js/map.js' %}"></script>
