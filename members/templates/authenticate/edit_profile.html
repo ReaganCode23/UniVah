@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .header {
+            background-color: #050A30;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 24px;
+        }
+        
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .driver-fields {
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-top: 20px;
+            background-color: #f8f9fa;
+        }
+
+        .btn-update {
+            background-color: #050A30;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .btn-update:hover {
+            background-color: #050A30;
+        }
+
+        .messages {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+        }
+
+        .messages li {
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 4px;
+        }
+
+        .messages .success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .messages .error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .form-check {
+            margin: 20px 0;
+        }
+
+        /* Hide the default password field from UserChangeForm */
+        .form-group p:has(input[type="hidden"]) {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        Edit Profile
+    </header>
+
+    <div class="form-container">
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li class="{{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+            
+            <!-- Basic Information -->
+            <h3 class="mb-4">Basic Information</h3>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">{{ form.first_name.label }}</label>
+                    {{ form.first_name }}
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">{{ form.last_name.label }}</label>
+                    {{ form.last_name }}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">{{ form.username.label }}</label>
+                    {{ form.username }}
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">{{ form.email.label }}</label>
+                    {{ form.email }}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">{{ form.phone_number.label }}</label>
+                    {{ form.phone_number }}
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">{{ form.academic_major.label }}</label>
+                    {{ form.academic_major }}
+                </div>
+            </div>
+
+            <!-- User Type Selection -->
+            <div class="form-check">
+                {{ form.is_rider }}
+                <label class="form-check-label" for="{{ form.is_rider.id_for_label }}">
+                    Register as Rider
+                </label>
+            </div>
+
+            <div class="form-check">
+                {{ form.is_driver }}
+                <label class="form-check-label" for="{{ form.is_driver.id_for_label }}">
+                    Register as Driver
+                </label>
+            </div>
+
+            <!-- Driver Information (Initially Hidden) -->
+            <div id="driver-fields" class="driver-fields" style="display: none;">
+                <h3 class="mb-4">Driver Information</h3>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">{{ form.vehicle_type.label }}</label>
+                        {{ form.vehicle_type }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">{{ form.vehicle_color.label }}</label>
+                        {{ form.vehicle_color }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">{{ form.license_number.label }}</label>
+                        {{ form.license_number }}
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-update">Update Profile</button>
+        </form>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Show/hide driver fields based on checkbox
+        document.getElementById('id_is_driver').addEventListener('change', function() {
+            const driverFields = document.getElementById('driver-fields');
+            driverFields.style.display = this.checked ? 'block' : 'none';
+        });
+
+        // Initialize driver fields visibility on page load
+        window.addEventListener('load', function() {
+            const isDriver = document.getElementById('id_is_driver').checked;
+            const driverFields = document.getElementById('driver-fields');
+            driverFields.style.display = isDriver ? 'block' : 'none';
+        });
+    </script>
+</body>
+</html>

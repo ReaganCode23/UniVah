@@ -7,7 +7,7 @@ body {
 }
 
 header {
-    background-color: #1e3a8a;
+    background-color: #050A30;
     padding: 10px 20px;
     height: auto;
     display: flex;
@@ -86,7 +86,7 @@ header ul li a {
     border-radius: 4px;
 }
 .btn {
-    background-color: #1e3a8a;
+    background-color: #050A30;
     color: #fff;
     padding: 0.75em 1.5em;
     border: none;
@@ -94,7 +94,7 @@ header ul li a {
     cursor: pointer;
 }
 .btn:hover {
-    background-color: #164282;
+    background-color: #050A30;
 }
 .messages {
     list-style: none;
@@ -111,7 +111,7 @@ header ul li a {
     border-radius: 4px;
 }
 footer {
-    background-color: #1e3a8a;
+    background-color: #050A30;
     color: #fff;
     text-align: center;
     padding: 15px;

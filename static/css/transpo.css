@@ -8,7 +8,7 @@ body {
 }
 
 header {
-    background-color: #1e3a8a;
+    background-color: #050A30;
     padding: 10px 20px;
     height: auto;
     display: flex;
@@ -85,7 +85,7 @@ header ul li a {
 
 .hero-text {
     max-width: 80%;
-    background: rgba(30, 58, 138, 0.7);
+    background: #050A30;
     padding: 20px;
     border-radius: 10px;
 }
@@ -188,7 +188,7 @@ border-radius: 10px;
 
 #reviews {
 padding: 50px;
-background-color: #e0f7fa;
+background-color: #050A30;
 }
 
 .reviews-grid {
@@ -220,7 +220,7 @@ text-align: center;
 }
 
 .contact-btn {
-background-color: #00796b;
+background-color: #050A30;
 color: white;
 padding: 10px 20px;
 text-decoration: none;
@@ -228,7 +228,7 @@ border-radius: 5px;
 }
 
 footer {
-background-color: #1e3a8a;
+background-color: #050A30;
 padding: 20px;
 text-align: center;
 color: #fff;
@@ -319,7 +319,7 @@ margin-top: 16px;
 }
 
 footer {
-    background-color: #1e3a8a;
+    background-color: #050A30;
     padding: 20px;
     text-align: center;
     color: #fff;
