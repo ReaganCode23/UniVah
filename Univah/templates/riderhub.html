@@ -50,6 +50,7 @@
                 <p><strong>Drop-off Location:</strong> {{ accepted_ride_request.dropoff_address }}</p>
                 <p><strong>Booking Type:</strong> {{ accepted_ride_request.booking_type }}</p>
                 <p><strong>Driver:</strong> {{ accepted_ride_request.driver.user.first_name }} {{ ride_request.driver.user.last_name }}</p>
+                <p><strong>Major:</strong> {{ accepted_ride_request.driver.major}}</p>
                 <p><strong>Driver Contact:</strong> {{ accepted_ride_request.driver.phone_number }}</p>
                 <p><strong>Vehicle Model:</strong> {{ accepted_ride_request.driver.vehicle_type}}</p>
                 <p><strong>Vehicle Color:</strong> {{ accepted_ride_request.driver.vehicle_color}}</p>

@@ -57,6 +57,7 @@ class UserEditView(generic.UpdateView):
                 driver.vehicle_color = form.cleaned_data.get('vehicle_color', '')
                 driver.license_number = form.cleaned_data.get('license_number', '')
                 driver.phone_number = form.cleaned_data.get('phone_number', '')
+                driver.major = form.cleaned_data.get('academic_major')
 
                 
                 # Save the driver instance
@@ -70,11 +71,13 @@ class UserEditView(generic.UpdateView):
             
             # Handle rider status
             if form.cleaned_data.get('is_rider', False):
-                Rider.objects.get_or_create(user=user)
+                rider, created = Rider.objects.get_or_create(user=user)
+                rider.major = form.cleaned_data.get('academic_major')
             else:
                 Rider.objects.filter(user=user).delete()
             
             # Save the user instance
+            rider.save()
             user.save()
             form.save_m2m()  # Save many-to-many relationships if any
             

@@ -7,7 +7,7 @@ body {
 }
 
 header {
-    background-color: #1e3a8a;
+    background-color: #050A30;
     padding: 10px 20px;
     height: auto;
     display: flex;
@@ -83,14 +83,14 @@ header ul li a {
     border: 1px solid #ccc;
 }
 button {
-    background-color: #00796b;
+    background-color: #050A30;
     color: white;
     border: none;
     cursor: pointer;
     font-size: 16px;
 }
 button:hover {
-    background-color: #005f56;
+    background-color: #050A30;
 }
 #map {
     height: 300px;
@@ -140,7 +140,7 @@ button:hover {
 
 
 footer {
-    background-color: #1e3a8a;
+    background-color: #050A30;
     padding: 20px;
     text-align: center;
     color: #fff;
@@ -154,3 +154,6 @@ footer {
         margin-bottom: 20px;
     }
 }
+
+
+
