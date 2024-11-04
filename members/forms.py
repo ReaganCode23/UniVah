@@ -73,19 +73,20 @@ class EditProfileForm(UserChangeForm):
                 self.fields['vehicle_type'].initial = driver.vehicle_type
                 self.fields['vehicle_color'].initial = driver.vehicle_color
                 self.fields['license_number'].initial = driver.license_number
+                self.fields['phone_number'].initial = driver.phone_number
+                self.fields['academic_major'].initial = driver.major
             except Driver.DoesNotExist:
                 self.fields['is_driver'].initial = False
 
             # Initialize rider status
             try:
-                Rider.objects.get(user=self.instance)
+                rider=Rider.objects.get(user=self.instance)
                 self.fields['is_rider'].initial = True
+                self.fields['phone_number'].initial = rider.phone_number
+                self.fields['academic_major'].initial = rider.major
             except Rider.DoesNotExist:
                 self.fields['is_rider'].initial = False
 
-            # Initialize other user fields
-            self.fields['phone_number'].initial = getattr(self.instance, 'phone_number', '')
-            self.fields['academic_major'].initial = getattr(self.instance, 'academic_major', '')
 
     def clean(self):
         cleaned_data = super().clean()
@@ -93,6 +94,10 @@ class EditProfileForm(UserChangeForm):
         vehicle_type = cleaned_data.get('vehicle_type')
         vehicle_color = cleaned_data.get('vehicle_color')
         license_number = cleaned_data.get('license_number')
+        phone_number = cleaned_data.get('phone_number')
+        major = cleaned_data.get('academic_major')
+
+
 
         # If user is a driver, validate vehicle information
         if is_driver:
