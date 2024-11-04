@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
 from . import models, forms
 
 class Home(View):
@@ -78,16 +80,21 @@ from django.contrib import messages
 class DriverHub(View):
     def get(self, request):
         #Initialize context
+        user = request.user # Assuming you have user authentication in place 
+        is_driver = models.Driver.objects.filter(user=user).exists()
         driver = models.Driver.objects.get(user=request.user)
         accepted_ride_requests = models.RideRequest.objects.filter(status='Accepted', driver=driver)
         ride_requests = models.RideRequest.objects.filter(status='Pending')
         activedrivers = models.Driver.objects.filter(status = 'Available')
-        return render(request, 'driverhub.html', {
-            'accepted_ride_requests': accepted_ride_requests,
-            'pending_ride_requests': ride_requests,
-            'user': request.user,
-            'activedrivers': activedrivers
-        })
+        if user.is_authenticated and is_driver:
+            return render(request, 'driverhub.html', {
+                'accepted_ride_requests': accepted_ride_requests,
+                'pending_ride_requests': ride_requests,
+                'user': request.user,
+                'activedrivers': activedrivers
+            })
+        else:
+            return redirect('login')
 
     def post(self, request):
         #get riderequest id from accept button

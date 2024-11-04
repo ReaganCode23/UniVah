@@ -23,7 +23,8 @@
                 <li><a href="#reviews">Reviews</a></li> 
                 <li><a href="#contact">Contact Us</a></li> 
                 {% if user.is_authenticated %}
-                    <li class="right-align"><a href="{% url 'logout' %}" class="nav-btn">Logout</a></li> 
+                <li class="right-align"><a href="{% url 'edit_profile' %}" class="nav-btn">Edit Profile</a></li> 
+                <li class="right-align"><a href="{% url 'logout' %}" class="nav-btn">Logout</a></li> 
                 {% else %} 
                     <li class="right-align"><a href="{% url 'login' %}" class="nav-btn">Login</a></li> 
                 {% endif %}  
@@ -62,7 +63,7 @@
     </section>
 
     <section id="reviews">
-        <h2>Customer Reviews</h2>
+        <h2><font color = white>Customer Reviews</font></h2>
         <div class="reviews-grid">
             <div class="review">
                 <p>"Amazing service! The ride was smooth, and the driver was punctual."</p>
