@@ -27,3 +27,6 @@ class Bookride(forms.Form):
         choices=[('instant', 'Instant Booking'), ('schedule', 'Schedule Ride')],
         widget=forms.Select(attrs={'id': 'booking_type'})
     )
+#Looking back after the expo, we probably could of done a lot of the form logic inside of here instead of in the html file.
+#For example, Only submiting the bookride form if the user had no riderequests associated with them
+#The html got really cluttered with all of the logic being used in there which I think is due to not using forms.py as much as we should of.

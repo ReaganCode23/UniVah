@@ -1,3 +1,5 @@
+//(Beware) Large Language Models were used in the making of the script
+
 // Initialize the map
 var map = L.map('map').setView([51.505, -0.09], 13);
 

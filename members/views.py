@@ -1,3 +1,6 @@
+#The members app was created with the help of the youtuber codemy.com and his Django turorial videos
+#https://www.youtube.com/@Codemycom
+
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
